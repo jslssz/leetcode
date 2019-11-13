@@ -7,12 +7,90 @@ package com.hx.classic;
  */
 public class Classic {
     public static void main(String[] args) {
+        Classic classic =new Classic();
+        String romanString =  "MCMXCIV";
+        System.out.println(classic.romanToInt(romanString));
+
 
     }
 
+        /**
+         * 罗马数字转整数
+         * 解题思路：
+         * 1. 依次迭代s,如果前后两个字符不一致，且非subtraction，进行次数累乘。如为subtraction取特别值。
+         * @param s 入参
+         * @return 转换数值
+         */
+        public int romanToInt(String s) {
+            char[] chars = s.toCharArray();
+            int result = 0;
+            int length = chars.length;
+            for (int i = 0; i < length; i++) {
+                char c = chars[i];
+                switch (c) {
+                    case 'M':
+                        result += 1000;
+                        break;
+                    case 'D':
+                        result += 500;
+                        break;
+                    case 'C':
+                        if (i < length - 1) {
+                            if (chars[i + 1] == 'M') {
+                                result += 900;
+                                i++;
+                                break;
+                            } else if (chars[i + 1] == 'D') {
+                                result += 400;
+                                i++;
+                                break;
+                            }
+                        }
+                        result += 100;
+                        break;
+                    case 'L':
+                        result += 50;
+                        break;
+                    case 'X':
+                        if (i < length - 1) {
+                            if (chars[i + 1] == 'C') {
+                                result += 90;
+                                i++;
+                                break;
+                            } else if (chars[i + 1] == 'L') {
+                                result += 40;
+                                i++;
+                                break;
+                            }
+                        }
+                        result += 10;
+                        break;
+                    case 'V':
+                        result += 5;
+                        break;
+                    default:
+                        // I
+                        if (i < length - 1) {
+                            if (chars[i + 1] == 'X') {
+                                result += 9;
+                                i++;
+                                break;
+                            } else if (chars[i + 1] == 'V') {
+                                result += 4;
+                                i++;
+                                break;
+                            }
+                        }
+                        result += 1;
+                        break;
+                }
+            }
+            return result;
+        }
+
 
     /**
-     *
+     * 9
      * 判断是否为回文数
      *
      * @param x
@@ -63,7 +141,6 @@ public class Classic {
         }
         return rev;
     }
-
 
 
 }
