@@ -8,28 +8,51 @@ package com.hx.string;
 public class MyString {
 
     public static void main(String[] args) {
-        MyString instance =new MyString();
+        MyString instance = new MyString();
 
-        String s1 ="hello";
-        String s2 ="ll";
-        instance.strStr(s1,s2);
+//        String s1 ="hello";
+//        String s2 ="ll";
+//        instance.strStr(s1,s2);
+        String s3 = "Hello World";
+        System.out.println(instance.lengthOfLastWord(s3));
 
     }
 
+
+
+
     /**
-     *  给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+     * 给定一个仅包含大小写字母和空格 ' ' 的字符串，返回其最后一个单词的长度。 如果不存在最后一个单词，请返回 0 。
+     * trim()方法的作用:取出字符串首位的空格,中间的空格不会去除
+     *
+     * @param s "Hello World";
+     * @return
+     */
+    public int lengthOfLastWord(String s) {
+        if (s == null || s.trim().length() == 0) {
+            return 0;
+        }
+        int length = s.trim().length();
+        int i = s.trim().lastIndexOf(" ");
+        return s.trim().length() - s.trim().lastIndexOf(" ") - 1;
+    }
+
+
+    /**
+     * 给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+     *
      * @param haystack
      * @param needle
      * @return
      */
     public int strStr(String haystack, String needle) {
-        if (haystack == null || needle == null || haystack.length() < needle.length()){
+        if (haystack == null || needle == null || haystack.length() < needle.length()) {
             return -1;
         }
-        if (needle.length() == 0){
+        if (needle.length() == 0) {
             return 0;
         }
-        int [] shift = new int[256];
+        int[] shift = new int[256];
         int i = 0;
         int plen = needle.length();
         int len = haystack.length();
@@ -38,13 +61,11 @@ public class MyString {
             shift[c] = plen - k++;
         }
         while (i + plen <= len) {
-            if (needle.equals(haystack.substring(i, i + plen))){
-            }
-            else {
-                if (i + plen < len && shift[haystack.charAt(i + plen)] != 0){
+            if (needle.equals(haystack.substring(i, i + plen))) {
+            } else {
+                if (i + plen < len && shift[haystack.charAt(i + plen)] != 0) {
                     i = i + shift[haystack.charAt(i + plen)];
-                }
-                else{
+                } else {
                     i = i + plen;
                 }
             }
@@ -79,7 +100,7 @@ public class MyString {
                     || item == ')' && stack[stackIndex - 1] != '(') {
                 boolean bool1 = stackIndex == 0 || item == ']';
                 boolean bool2 = stack[stackIndex - 1] != '[' || item == '}';
-                boolean bool3 = stack[stackIndex - 1] != '{' || item == ')' ;
+                boolean bool3 = stack[stackIndex - 1] != '{' || item == ')';
                 boolean bool4 = stack[stackIndex - 1] != '(';
                 return false;
             } else {

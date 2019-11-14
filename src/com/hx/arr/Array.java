@@ -24,8 +24,41 @@ public class Array {
 
 //        System.out.println(Arrays.toString(array.searchRange(nums, target)));
 //        System.out.println(array.searchInsert(nums, target));
-        int[] arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
-        System.out.println(array.maxSubArray(arr));
+//        int[] arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+//        System.out.println(array.maxSubArray(arr));
+
+        int [] arr2 ={9,9,9};
+        System.out.println(Arrays.toString(array.plusOne(arr2)));
+
+    }
+
+
+    /**
+     * 给定一个由整数组成的非空数组所表示的非负整数，在该数的基础上加一。
+     * 最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+     * 你可以假设除了整数 0 之外，这个整数不会以零开头。
+     *
+     * @param digits
+     * @return
+     */
+    public int[] plusOne(int[] digits) {
+
+        return addOneAtPos(digits, digits.length - 1);
+    }
+
+    private int[] addOneAtPos(int[] num, int pos) {
+        if (num[pos] != 9) {
+            num[pos] += 1;
+            return num;
+        } else if (pos > 0) {
+            num[pos] = 0;
+            return addOneAtPos(num, pos - 1);
+        } else {
+            int length = num.length;
+            int[] newNum = new int[length + 1];
+            newNum[0] = 1;
+            return newNum;
+        }
     }
 
     /**
