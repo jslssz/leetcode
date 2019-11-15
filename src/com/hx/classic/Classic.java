@@ -1,5 +1,8 @@
 package com.hx.classic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author jxlgcmh
  * @date 2019-11-13 21:14
@@ -7,14 +10,56 @@ package com.hx.classic;
  */
 public class Classic {
     public static void main(String[] args) {
-        Classic classic = new Classic();
+        Classic instance = new Classic();
 //        String romanString =  "MCMXCIV";
 //        System.out.println(classic.romanToInt(romanString));
 
 //        String s3 = "{}{}{}";
 //        System.out.println(classic.isValid(s3));
 
+        instance.generate(4);
+
     }
+
+    /**
+     *  生成杨辉三角
+     * @param numRows
+     * @return
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> arrList = null;
+        // 第一行手动生成
+        if(numRows >= 1){
+            arrList = new ArrayList<>();
+            arrList.add(1);
+            result.add(arrList);
+        }
+        // 第一行手动生成
+        if(numRows >= 2){
+            arrList = new ArrayList<>();
+            arrList.add(1);
+            arrList.add(1);
+            result.add(arrList);
+        }
+
+        for (int i = 2; i < numRows; i++) {
+            int j = i - 1;
+            arrList = new ArrayList<>();
+            // 初始化第一个元素
+            arrList.add(1);
+            while (j >= 1) {
+                arrList.add(result.get(i-1).get(j-1)+result.get(i-1).get(j));
+                j--;
+            }
+            // 初始化最后一个元素
+            arrList.add(1);
+            result.add(arrList);
+        }
+        return result;
+    }
+
+
     /**
      * 9
      * 判断是否为回文数
