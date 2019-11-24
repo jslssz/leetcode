@@ -12,7 +12,7 @@ public class Array {
     public static void main(String[] args) {
         Array array = new Array();
         // System.out.println(array.isPalindrome(1));
-        int[] nums = {7, 8, 9,11};
+        int[] nums = {0,7, 0,0,0,8, 9,0, 11};
         int target = 19;
 //        int[] result = array.twoSum(nums, target);
 //        System.out.println(result[0] + "  " + result[1]);
@@ -35,12 +35,33 @@ public class Array {
 //        String[] arr = {"2", "1", "+", "3", "*"};
 //        System.out.println(array.evalRPN(arr));
 
-        System.out.println(Arrays.toString(array.twoSumII(nums, target)));
+//        System.out.println(Arrays.toString(array.twoSumII(nums, target)));
+        array.moveZeroes(nums);
     }
+
+    /**
+     * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序
+     *
+     * @param nums
+     */
+    public void moveZeroes(int[] nums) {
+        //定义两个指针变量，i用来往前探索，j用来保持<=j的数非零
+        int j = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                j++;
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+    }
+
 
     /**
      * 给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。
      * https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/
+     *
      * @param numbers
      * @param target
      * @return

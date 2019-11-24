@@ -12,6 +12,24 @@ public class Tree {
 
 
     /**
+     *  反转二叉树
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if(root == null){
+            return null;
+        }
+
+        TreeNode rootLeft =  invertTree(root.left);
+        TreeNode rootRight =  invertTree(root.right);
+        root.left  =rootRight;
+        root.right = rootLeft;
+        return root;
+
+    }
+
+    /**
      *  求二叉树的最大深度
      * @param root
      * @return
