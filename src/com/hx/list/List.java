@@ -22,6 +22,24 @@ public class List {
         list.mergeTwoLists(listNode1,listNode4);
     }
 
+    /**
+     * 判断链表是否有环  用双指针的方式
+     * @param head
+     * @return
+     */
+    public boolean hasCycle(ListNode head) {
+        ListNode point1 = head;
+        ListNode point2 = head;
+        while (point1 != null && point2 != null && point2.next != null) {
+            point1 = point1.next;
+            point2 = point2.next.next;
+            if (point1 == point2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * 给定一个<<排序>>链表，删除所有重复的元素，使得每个元素只出现一次。

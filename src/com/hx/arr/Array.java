@@ -12,8 +12,8 @@ public class Array {
     public static void main(String[] args) {
         Array array = new Array();
         // System.out.println(array.isPalindrome(1));
-        int[] nums = {7, 8, 9};
-        int target = 11;
+        int[] nums = {7, 8, 9,11};
+        int target = 19;
 //        int[] result = array.twoSum(nums, target);
 //        System.out.println(result[0] + "  " + result[1]);
 
@@ -30,18 +30,97 @@ public class Array {
 //        int[] arr2 = {9, 9, 9};
 //        System.out.println(Arrays.toString(array.plusOne(arr2)));
 
-        int[] arr2 = {4,1,2,1,2};
-        System.out.println(array.singleNumber(arr2));
+//        int[] arr2 = {4,1,2,1,2};
+//        System.out.println(array.singleNumber(arr2));
+//        String[] arr = {"2", "1", "+", "3", "*"};
+//        System.out.println(array.evalRPN(arr));
+
+        System.out.println(Arrays.toString(array.twoSumII(nums, target)));
+    }
+
+    /**
+     * 给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。
+     * https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/
+     * @param numbers
+     * @param target
+     * @return
+     */
+    public int[] twoSumII(int[] numbers, int target) {
+        int left = 0;
+        int right = numbers.length - 1;
+        int[] result = new int[2];
+        while (left < right) {
+            if (numbers[left] + numbers[right] == target) {
+                result[0] = left + 1;
+                result[1] = right + 1;
+                break;
+            }
+            while (numbers[left] + numbers[right] > target) {
+                right--;
+            }
+            while (numbers[left] + numbers[right] < target) {
+                left++;
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * 输入: ["2", "1", "+", "3", "*"]
+     * 输出: 9
+     * 解释: ((2 + 1) * 3) = 9
+     * 逆波兰表达式求值
+     *
+     * @param tokens
+     * @return
+     */
+    public int evalRPN(String[] tokens) {
+        int[] queue = new int[tokens.length];
+        int index = -1;
+        for (String token : tokens) {
+            ++index;
+            switch (token) {
+                case "+":
+                    queue[index - 2] = queue[index - 2] + queue[index - 1];
+                    index -= 2;
+                    break;
+                case "-":
+                    queue[index - 2] = queue[index - 2] - queue[index - 1];
+                    index -= 2;
+                    break;
+                case "*":
+
+                    queue[index - 2] = queue[index - 2] * queue[index - 1];
+                    index -= 2;
+                    break;
+                case "/":
+
+                    queue[index - 2] = queue[index - 2] / queue[index - 1];
+                    index -= 2;
+                    break;
+                default:
+                    queue[index] = Integer.parseInt(token);
+                    break;
+            }
+        }
+        return queue[0];
     }
 
     /**
      * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     * 交换律：a ^ b ^ c 等价于 a ^ c ^ b
+     * <p>
+     * 任何数于0异或为任何数 0 ^ n 等于 n
+     * <p>
+     * 相同的数异或为0: n ^ n 等于 0
+     *
      * @param nums
      * @return
      */
     public int singleNumber(int[] nums) {
         int num = 0;
-        for(int i=0;i<nums.length;i++){
+        for (int i = 0; i < nums.length; i++) {
             //异或0001 ^ 0010 = 0011
             // 同为0，异为1
             num = num ^ nums[i];
@@ -50,13 +129,11 @@ public class Array {
     }
 
 
-
-
-
     /**
-     *  给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
-     *  初始化 nums1 和 nums2 的元素数量分别为 m 和 n。
+     * 给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
+     * 初始化 nums1 和 nums2 的元素数量分别为 m 和 n。
      * 你可以假设 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。
+     *
      * @param nums1
      * @param m
      * @param nums2
@@ -67,10 +144,10 @@ public class Array {
         int arr1Len = m - 1;
         int arr2Len = n - 1;
         // 根据题意:arr1Len >arr2Len,并且sumLen =arr1Len +arr2Len
-        while (arr1Len >= 0 && arr2Len >= 0){
+        while (arr1Len >= 0 && arr2Len >= 0) {
             nums1[sumLen--] = nums1[arr1Len] > nums2[arr2Len] ? nums1[arr1Len--] : nums2[arr2Len--];
         }
-        while (arr2Len >= 0){
+        while (arr2Len >= 0) {
             nums1[sumLen--] = nums2[arr2Len--];
         }
     }
