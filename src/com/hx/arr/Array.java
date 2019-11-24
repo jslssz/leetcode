@@ -26,11 +26,32 @@ public class Array {
 //        System.out.println(array.searchInsert(nums, target));
 //        int[] arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
 //        System.out.println(array.maxSubArray(arr));
+//
+//        int[] arr2 = {9, 9, 9};
+//        System.out.println(Arrays.toString(array.plusOne(arr2)));
 
-        int[] arr2 = {9, 9, 9};
-        System.out.println(Arrays.toString(array.plusOne(arr2)));
-
+        int[] arr2 = {4,1,2,1,2};
+        System.out.println(array.singleNumber(arr2));
     }
+
+    /**
+     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     * @param nums
+     * @return
+     */
+    public int singleNumber(int[] nums) {
+        int num = 0;
+        for(int i=0;i<nums.length;i++){
+            //异或0001 ^ 0010 = 0011
+            // 同为0，异为1
+            num = num ^ nums[i];
+        }
+        return num;
+    }
+
+
+
+
 
     /**
      *  给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。

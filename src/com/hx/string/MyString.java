@@ -15,7 +15,38 @@ public class MyString {
 //        instance.strStr(s1,s2);
         String s3 = "Hello World";
         System.out.println(instance.lengthOfLastWord(s3));
+        String s4="A man, a plan, a canal: Panama";
+        System.out.println(instance.isPalindrome(s4));
 
+    }
+
+
+    /**
+     * 判断是否为回文字符串
+     * @param s "A man, a plan, a canal: Panama"
+     * @return result
+     */
+    public boolean isPalindrome(String s) {
+        char[] cs = s.toCharArray();
+        int cnt = 0, j = 0;
+        for (int i = 0; i < cs.length; i++) {
+            if (('0' <= cs[i] && cs[i] <= '9') || ('a' <= cs[i] && cs[i] <= 'z')) {
+                cs[cnt++] = cs[i];
+            }
+            // 大写字母的处理
+            else if ('A' <= cs[i] && cs[i] <= 'Z') {
+                cs[cnt++] = (char) (cs[i] - 'A' + 'a');
+            }
+            // 自动过滤了其他非字母的字符
+        }
+        // 下标指回去
+        cnt--;
+        while (j < cnt) {
+            if (cs[j++] != cs[cnt--]) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
