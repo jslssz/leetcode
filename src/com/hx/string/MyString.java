@@ -13,16 +13,49 @@ public class MyString {
 //        String s1 ="hello";
 //        String s2 ="ll";
 //        instance.strStr(s1,s2);
-        String s3 = "Hello World";
-        System.out.println(instance.lengthOfLastWord(s3));
-        String s4="A man, a plan, a canal: Panama";
-        System.out.println(instance.isPalindrome(s4));
+//        String s3 = "Hello World";
+//        System.out.println(instance.lengthOfLastWord(s3));
+//        String s4 = "A man, a plan, a canal: Panama";
+//        System.out.println(instance.isPalindrome(s4));
+         String s = "(()())(())";
+         instance.removeOuterParentheses(s);
+    }
 
+
+    /**
+     * 输入："(()())(())"
+     * 输出："()()()"
+     * 解释：
+     * 输入字符串为 "(()())(())"，原语化分解得到 "(()())" + "(())"，
+     * 删除每个部分中的最外层括号后得到 "()()" + "()" = "()()()"。
+     * 链接：https://leetcode-cn.com/problems/remove-outermost-parentheses
+     * @param S
+     * @return
+     */
+    public String removeOuterParentheses(String S) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (char c : S.toCharArray()) {
+            if (c == '(') {
+                count++;
+                if (count > 1) {
+                    sb.append(c);
+                }
+            } else {
+                if (count > 1) {
+                    sb.append(c);
+                }
+                // 相当于使用栈的情况下的弹出栈顶
+                count--;
+            }
+        }
+        return sb.toString();
     }
 
 
     /**
      * 判断是否为回文字符串
+     *
      * @param s "A man, a plan, a canal: Panama"
      * @return result
      */
@@ -48,8 +81,6 @@ public class MyString {
         }
         return true;
     }
-
-
 
 
     /**

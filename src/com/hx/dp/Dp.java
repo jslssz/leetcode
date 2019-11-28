@@ -11,6 +11,24 @@ public class Dp {
     }
 
     /**
+     * 股票买卖最佳时机I 动态规划解题
+     * @param prices
+     * @return
+     */
+    public int maxProfitIDp(int[] prices) {
+        if(prices.length <= 1){
+            return 0;
+        }
+        int min = prices[0], max = 0;
+        for(int i = 1; i < prices.length; i++) {
+            int temp = prices[i] - min;
+            max = Math.max(max, temp);
+            min = Math.min(min, prices[i]);
+        }
+        return max;
+    }
+
+    /**
      *  爬楼梯问题 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
      *
      * 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
