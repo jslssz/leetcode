@@ -11,17 +11,26 @@ import java.util.List;
 public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
-//        System.out.println(instance.trailingZeroes(10));
-//        String a="11",  b="1";
-//        instance.addBinary(a,b);
-//        System.out.println(instance.countPrimes(10));
-//        System.out.println(instance.addDigitsII(88977));
-        System.out.println(instance.isPowerOfThree(45));
+        System.out.println(instance.convertToTitle(28));
 
     }
 
+
+    /**
+     * 你总共有 n 枚硬币，你需要将它们摆成一个阶梯形状，第 k 行就必须正好有 k 枚硬币。
+     *
+     * 给定一个数字 n，找出可形成完整阶梯行的总行数。
+     *
+     * n 是一个非负整数，并且在32位有符号整型的范围内。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/arranging-coins
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     * 求根公式
+     * @param n
+     * @return
+     */
     public int arrangeCoins(int n) {
-       // return (int) (Math.sqrt(8.0*n-1)/2.0 - 1.0 / 2);
         return (int)(Math.sqrt(2) * Math.sqrt(n + 0.125) - 0.5);
     }
 
@@ -67,6 +76,12 @@ public class MyMath {
         return n == 1;
     }
 
+    /**
+     *  1,2,3，...，n中缺失的数字
+     *  利用求和公式，减去现有的和就是缺失的数字
+     * @param nums
+     * @return
+     */
     public int missingNumber(int[] nums) {
         int n = nums.length;
         int sum = 0;
@@ -231,7 +246,6 @@ public class MyMath {
         //因为只有5和2相乘才可以是10。于是计算n中5的个数，要注意比如25其实是有两个5，
         while (n >= 5) {
             //每次都只加一层的个数
-
             //第一层有5的个数（以25为例）
             fivetimes += n / 5;
             //除以5之后就变成了第二层（n中包含25的个数，如果有一个就会在第二层判断时+1）...以此类推之后是n中包含25*5=125的个数;
@@ -250,6 +264,7 @@ public class MyMath {
         char[] c = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         StringBuilder sb = new StringBuilder();
         while (n > 0) {
+            // 为什么要减一？因为把它放在了数组之中，下标从0开始
             n--;
             sb.insert(0, c[n % 26] + "");
             n = n / 26;
@@ -287,6 +302,7 @@ public class MyMath {
             // 初始化第一个元素
             arrList.add(1);
             while (j >= 1) {
+                //特别提醒，list的下标是从第0个开始，所以这层for循环从2开始
                 arrList.add(result.get(i - 1).get(j - 1) + result.get(i - 1).get(j));
                 j--;
             }
@@ -336,19 +352,19 @@ public class MyMath {
      * @return
      */
     public int reverse(int x) {
-        int rev = 0;
+        int res = 0;
         while (x != 0) {
             int pop = x % 10;
             x /= 10;
-            if (rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
+            if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && pop > 7)) {
                 return 0;
             }
-            if (rev < Integer.MIN_VALUE / 10 || (rev == Integer.MIN_VALUE / 10 && pop < -8)) {
+            if (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && pop < -8)) {
                 return 0;
             }
-            rev = rev * 10 + pop;
+            res = res * 10 + pop;
         }
-        return rev;
+        return res;
     }
 
 
