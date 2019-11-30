@@ -9,18 +9,83 @@ public class MyString {
 
     public static void main(String[] args) {
         MyString instance = new MyString();
-
-//        String s1 ="hello";
-//        String s2 ="ll";
-//        instance.strStr(s1,s2);
-//        String s3 = "Hello World";
-//        System.out.println(instance.lengthOfLastWord(s3));
-//        String s4 = "A man, a plan, a canal: Panama";
-//        System.out.println(instance.isPalindrome(s4));
-         String s = "(()())(())";
-         instance.removeOuterParentheses(s);
+        String s = "leetcode";
+        String s2 = "Aa";
+        String s3 = "!!!";
+        String s4 = "hello";
+        System.out.println(instance.reverseVowels(s));
     }
 
+
+    /**
+     * 编写一个函数，以字符串作为输入，反转该字符串中的元音字母
+     * 输入: "hello"
+     * 输出: "holle"
+     * https://leetcode-cn.com/problems/reverse-vowels-of-a-string/
+     * <p>
+     * 处理代码的健壮性问题，如果是非法字母 eg "!!!!"  处理超时问题
+     *
+     * @param s
+     * @return
+     */
+    public String reverseVowels(String s) {
+        if (s == null || s.length() < 2) {
+            return s;
+        }
+        char[] chars = s.toCharArray();
+        int start = 0;
+        int end = chars.length - 1;
+        while (start < end) {
+            while (start < end && !isVowel(chars[start])) {
+                start++;
+            }
+            while (end > start && !isVowel(chars[end])) {
+                end--;
+            }
+            if (start < end) {
+                char temp = chars[start];
+                chars[start] = chars[end];
+                chars[end] = temp;
+            }
+            start++;
+            end--;
+        }
+        return new String(chars);
+    }
+
+
+    public String reverseVowelsIIII(String s) {
+        char[] chars = s.toCharArray();
+        int p2 = 0;
+        int len = chars.length;
+        for (int i = 0; i <= len - 2; i++) {
+            while (!isVowel(chars[i])) {
+                i++;
+                if (i > len - 2) {
+                    break;
+                }
+            }
+
+            while (!isVowel(chars[len - 1 - p2])) {
+                p2++;
+                if (p2 >= len) {
+                    break;
+                }
+            }
+            if (i < len - 1 - p2) {
+                char temp = chars[i];
+                chars[i] = chars[len - 1 - p2];
+                chars[len - 1 - p2] = temp;
+                p2++;
+            }
+
+        }
+        return new String(chars);
+    }
+
+    private boolean isVowel(char input) {
+        return 'a' == input || 'e' == input || 'i' == input || 'o' == input || 'u' == input || 'A' == input || 'E' == input || 'I' == input || 'O' == input || 'U' == input;
+    }
 
     /**
      * 输入："(()())(())"
@@ -29,6 +94,7 @@ public class MyString {
      * 输入字符串为 "(()())(())"，原语化分解得到 "(()())" + "(())"，
      * 删除每个部分中的最外层括号后得到 "()()" + "()" = "()()()"。
      * 链接：https://leetcode-cn.com/problems/remove-outermost-parentheses
+     *
      * @param S
      * @return
      */

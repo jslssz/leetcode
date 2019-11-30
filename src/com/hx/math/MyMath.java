@@ -11,37 +11,72 @@ import java.util.List;
 public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
-        System.out.println(instance.convertToTitle(28));
+        instance.checkPerfectNumberII(28);
+    }
 
+    /**
+     * 完美数
+     * 对于一个 正整数，如果它和除了它自身以外的所有正因子之和相等，我们称它为“完美数”。
+     * 给定一个 整数 n， 如果他是完美数，返回 True，否则返回 False
+     * 链接：https://leetcode-cn.com/problems/perfect-number
+     * 超时
+     *
+     * @param num
+     * @return
+     */
+    public boolean checkPerfectNumber(int num) {
+        int sum = 0;
+        for (int i = 1; i < num; i++) {
+            if (num % i == 0) {
+                sum += i;
+            }
+        }
+        return sum == num;
+    }
+
+    public boolean checkPerfectNumberII(int num) {
+        if (num == 1) {
+            return false;
+        }
+        int sum = 1;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) {
+                sum += i;
+                int temp = num / i;
+                sum += temp;
+            }
+        }
+        return sum == num;
     }
 
 
     /**
      * 你总共有 n 枚硬币，你需要将它们摆成一个阶梯形状，第 k 行就必须正好有 k 枚硬币。
-     *
+     * <p>
      * 给定一个数字 n，找出可形成完整阶梯行的总行数。
-     *
+     * <p>
      * n 是一个非负整数，并且在32位有符号整型的范围内。
-     *
+     * <p>
      * 来源：力扣（LeetCode）
      * 链接：https://leetcode-cn.com/problems/arranging-coins
      * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
      * 求根公式
+     *
      * @param n
      * @return
      */
     public int arrangeCoins(int n) {
-        return (int)(Math.sqrt(2) * Math.sqrt(n + 0.125) - 0.5);
+        return (int) (Math.sqrt(2) * Math.sqrt(n + 0.125) - 0.5);
     }
 
     public int arrangeCoinsII(int n) {
-        int i=1;
+        int i = 1;
         //n小于该行应有的个数则停止
-        while (n>=i){
-            n-=i;
+        while (n >= i) {
+            n -= i;
             i++;
         }
-        return i-1;
+        return i - 1;
     }
 
     /**
@@ -77,8 +112,9 @@ public class MyMath {
     }
 
     /**
-     *  1,2,3，...，n中缺失的数字
-     *  利用求和公式，减去现有的和就是缺失的数字
+     * 1,2,3，...，n中缺失的数字
+     * 利用求和公式，减去现有的和就是缺失的数字
+     *
      * @param nums
      * @return
      */
