@@ -2,6 +2,11 @@ package com.hx.tree;
 
 import com.hx.list.ListNode;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 /**
  * @author jxlgcmh
  * @date 2019-11-15 09:33
@@ -9,7 +14,59 @@ import com.hx.list.ListNode;
  */
 public class Tree {
     public static void main(String[] args) {
+        // 初始化一个二叉树
+        TreeNode root = new TreeNode(1);
+        TreeNode l1 = new TreeNode(2);
+        TreeNode rl = new TreeNode(3);
+        root.left = l1;
+        root.right = rl;
+        TreeNode ll2 = new TreeNode(4);
+        TreeNode lr2 = new TreeNode(5);
+        l1.left = ll2;
+        l1.right = lr2;
+        TreeNode rl2 = new TreeNode(6);
+        TreeNode rr2 = new TreeNode(7);
+        rl.left = rl2;
+        rl.right = rr2;
+        // 测试工作
+        Tree instance = new Tree();
+        instance.levelOrderBottom(root);
+    }
 
+
+    /**
+     * 层序遍历二叉树
+     *
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        LinkedList<List<Integer>> result = new LinkedList<>();
+        if (root == null) {
+            return result;
+        }
+        // queue是临时队列
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> oneLevel = new ArrayList<>();
+            // 每次都取出一层的所有数据
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                // 通过size，总计出多少次队列
+                TreeNode node = queue.poll();
+                oneLevel.add(node.val);
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            // 每次都往队头塞
+            result.addFirst(oneLevel);
+        }
+        return result;
     }
 
     /**
