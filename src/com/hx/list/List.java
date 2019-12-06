@@ -11,19 +11,119 @@ import java.util.Stack;
 public class List {
     public static void main(String[] args) {
         List instance = new List();
-        ListNode listNode1 = new ListNode(2);
-        ListNode listNode2 = new ListNode(4);
+        ListNode listNode1 = new ListNode(1);
+        ListNode listNode2 = new ListNode(2);
         ListNode listNode3 = new ListNode(3);
         listNode1.next = listNode2;
         listNode2.next = listNode3;
-        ListNode listNode4 = new ListNode(5);
-        ListNode listNode5 = new ListNode(6);
-        ListNode listNode6 = new ListNode(4);
+        ListNode listNode4 = new ListNode(4);
+        ListNode listNode5 = new ListNode(5);
+        ListNode listNode6 = new ListNode(6);
+//         测试使用  记得删除
+        listNode3.next=listNode4;
         listNode4.next = listNode5;
         listNode5.next = listNode6;
-        instance.addTwoNumbers(listNode1, listNode4);
+
+        instance.reverseBetween(listNode1,2,4);
     }
 
+    /**
+     * 链接：https://leetcode-cn.com/problems/reverse-linked-list-ii/solution/zhao-dao-mhao-jie-dian-de-qian-yi-ge-jie-dian-zai-/
+     *
+     * @param head
+     * @param m
+     * @param n
+     * @return
+     */
+
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        // tail 记录首个需要翻转的节点
+        ListNode tail = head;
+        // pre 记录首个需要翻转的节点的前一个节点
+        ListNode pre = head;
+        // 用 pre 记录翻转序列的前一个节点, tail 记录翻转序列的头一个节点
+        for (int i = 1; i < m; ++i) {
+            pre = tail;
+            tail = tail.next;
+        }
+        // 新的 n 记录需要翻转的次数
+        n -= m;
+        // 记录需翻转的字串的头节点
+        ListNode subHead = tail;
+        // 翻转子串
+        while (n-- != 0) {
+            ListNode h = tail.next;
+            tail.next = h.next;
+            h.next = subHead;
+            subHead = h;
+            // 若不是从第一个节点就开始翻转,则进行子串头节点的拼接操作
+            if (m != 1) {
+                pre.next = subHead;
+            }
+        }
+        // 若不是从首节点开始翻转,直接返回原头结点
+        if (m != 1) {
+            return head;
+        }
+        // 否则表示从首节点开始翻转,返回新的头结点
+        return subHead;
+    }
+
+
+    /**
+     * 寻找链表中的环的起始位置
+     *
+     * @param head
+     * @return
+     */
+    public ListNode detectCycleII(ListNode head) {
+        ListNode fast = head, slow = head;
+        do {
+            if (fast == null || fast.next == null) {
+                return null;
+            }
+            fast = fast.next.next;
+            slow = slow.next;
+        } while (fast != slow);
+        fast = head;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return fast;
+    }
+
+
+    /**
+     * 删除链表中的倒数第n个节点
+     *
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null) {
+            return null;
+        }
+        ListNode leader = head;
+        ListNode follower = head;
+        //领导先行n步
+        for (int i = 0; i < n + 1; i++) {
+            // 这一步很妙啊！！！
+            if (leader == null) {
+                return head.next;
+            }
+            leader = leader.next;
+        }
+        //同步前进直到领导到末尾
+        while (leader != null) {
+            leader = leader.next;
+            follower = follower.next;
+        }
+        //删除追随者处的节点
+        follower.next = follower.next.next;
+        return head;
+    }
 
     /**
      * 给出两个 非空 的链表用来表示两个非负的整数。
@@ -94,6 +194,7 @@ public class List {
         }
         return head;
     }
+
     public ListNode addTwoNumbersII(ListNode l1, ListNode l2) {
         if (l1 == null && l2 == null) {
             return null;
@@ -170,11 +271,11 @@ public class List {
     public ListNode reverseList(ListNode head) {
         ListNode temp = null;
         ListNode next = null;
-        while (head != null) {
-            next = head.next;
+        while(head !=null){
+            next =head.next;
             head.next = temp;
             temp = head;
-            head = next;
+            head =next;
         }
         return temp;
     }
@@ -218,6 +319,22 @@ public class List {
             }
         }
         return false;
+    }
+
+    public boolean hasCyclePro(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (slow != fast) {
+            if (fast == null || fast.next == null) {
+                return false;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return true;
     }
 
 

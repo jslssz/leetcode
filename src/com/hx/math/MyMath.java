@@ -1,6 +1,8 @@
 package com.hx.math;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,7 +13,240 @@ import java.util.List;
 public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
-        instance.checkPerfectNumberII(28);
+        int [] arr ={1,2,3,4,4,3,2,1,1,1};
+        System.out.println(instance.hasGroupsSizeX(arr));
+    }
+
+    public boolean hasGroupsSizeX(int[] deck) {
+        int len = deck.length;
+        int[] count = new int[10000];
+        for (int c : deck) {
+            count[c]++;
+        }
+
+        List<Integer> values = new ArrayList<>();
+        for (int i = 0; i < 10000; ++i) {
+            if (count[i] > 0) {
+                values.add(count[i]);
+            }
+        }
+
+        for (int x = 2; x <= len; ++x) {
+            if (len % x == 0) {
+                for (int v : values) {
+                    if (v % x != 0) {
+                        break;
+                    }
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * 三角形最大面积
+     * 链接：https://leetcode-cn.com/problems/largest-triangle-area/solution/zui-da-san-jiao-xing-mian-ji-by-leetcode/
+     *
+     * @param points
+     * @return
+     */
+    public double largestTriangleArea(int[][] points) {
+        int len = points.length;
+        double ans = 0;
+        for (int i = 0; i < len; ++i) {
+            for (int j = i + 1; j < len; ++j) {
+                for (int k = j + 1; k < len; ++k) {
+                    ans = Math.max(ans, area(points[i], points[j], points[k]));
+                }
+            }
+        }
+        return ans;
+    }
+
+    private double area(int[] P, int[] Q, int[] R) {
+        return 0.5 * Math.abs(P[0] * Q[1] + Q[0] * R[1] + R[0] * P[1]
+                - P[1] * Q[0] - Q[1] * R[0] - R[1] * P[0]);
+    }
+
+
+    /**
+     * 自除数 是指可以被它包含的每一位数除尽的数。
+     * 输入：
+     * 上边界left = 1, 下边界right = 22
+     * 输出： [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
+     *
+     * @param left
+     * @param right
+     * @return
+     */
+    public List<Integer> selfDividingNumbers(int left, int right) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = left; i <= right; i++) {
+            boolean flag = true;
+            int temp = i;
+            while (temp > 0) {
+                int a = temp % 10;
+                if (a == 0 || i % a != 0) {
+                    flag = false;
+                    break;
+                }
+                temp /= 10;
+            }
+            if (flag) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 集合 S 包含从1到 n 的整数。不幸的是，因为数据错误，导致集合里面某一个元素复制了成了集合里面的另外一个元素的值，导致集合丢失了一个整数并且有一个元素重复。
+     * <p>
+     * 给定一个数组 nums 代表了集合 S 发生错误后的结果。你的任务是首先寻找到重复出现的整数，再找到丢失的整数，将它们以数组的形式返回。
+     * 输入: nums = [1,2,2,4]
+     * 输出: [2,3]
+     * 链接：https://leetcode-cn.com/problems/set-mismatch
+     *
+     * @param nums
+     * @return
+     */
+    public int[] findErrorNums(int[] nums) {
+        int[] out = new int[2];
+        int[] count = new int[10002];
+        for (int num : nums) {
+            count[num]++;
+        }
+        for (int i = 1; i <= nums.length; i++) {
+            if (count[i] == 2) {
+                out[0] = i;
+            }
+            if (count[i] == 0) {
+                out[1] = i;
+            }
+        }
+        return out;
+    }
+
+
+    /**
+     * 给定一个非负整数 c ，你要判断是否存在两个整数 a 和 b，使得 a2 + b2 = c。
+     * 链接：https://leetcode-cn.com/problems/sum-of-square-numbers/solution/ping-fang-shu-zhi-he-by-leetcode/
+     *
+     * @param c
+     * @return
+     */
+    public boolean judgeSquareSum(int c) {
+        for (long a = 0; a * a <= c; a++) {
+            int b = c - (int) (a * a);
+            if (binarySearch(0, b, b)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean binarySearch(long s, long e, int n) {
+        if (s > e) {
+            return false;
+        }
+        long mid = s + (e - s) / 2;
+        if (mid * mid == n) {
+            return true;
+        }
+        if (mid * mid > n) {
+            return binarySearch(s, mid - 1, n);
+        }
+        return binarySearch(mid + 1, e, n);
+    }
+
+    public boolean judgeSquareSumII(int c) {
+        for (long a = 0; a * a <= c; a++) {
+            double b = Math.sqrt(c - a * a);
+            if (b == (int) b) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 三个数最大乘积
+     * 思路一：排序，如果全为正数，则是最后三个数的乘积，如果全为负数，则是最前两个负数和最后一个正数的乘积
+     *
+     * @param nums
+     * @return 链接：https://leetcode-cn.com/problems/maximum-product-of-three-numbers/solution/san-ge-shu-de-zui-da-cheng-ji-by-leetcode/
+     */
+    public int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        return Math.max(nums[0] * nums[1] * nums[nums.length - 1], nums[nums.length - 1] * nums[nums.length - 2] * nums[nums.length - 3]);
+    }
+
+    /**
+     * 线性的方式
+     *
+     * @param nums
+     * @return
+     */
+    public int maximumProductII(int[] nums) {
+        int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
+        int max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE, max3 = Integer.MIN_VALUE;
+        for (int n : nums) {
+            // min 用来存最小的值
+            if (n <= min1) {
+                min2 = min1;
+                min1 = n;
+            }
+            // min2 用来存倒数第二小的值
+            else if (n <= min2) {
+                min2 = n;
+            }
+            // max1 用来存最大的值
+            if (n >= max1) {
+                max3 = max2;
+                max2 = max1;
+                max1 = n;
+            }
+            // max2用来存倒数第二大的值
+            else if (n >= max2) {
+                max3 = max2;
+                max2 = n;
+            }
+            // max3 用来存第三大的值
+            else if (n >= max3) {
+                max3 = n;
+            }
+        }
+        return Math.max(min1 * min2 * max1, max1 * max2 * max3);
+    }
+
+
+    /**
+     * 范围求和II
+     * https://leetcode-cn.com/problems/range-addition-ii/
+     *
+     * @param m
+     * @param n
+     * @param ops
+     * @return
+     */
+    public int maxCount(int m, int n, int[][] ops) {
+        int xmin = Integer.MAX_VALUE, ymin = Integer.MAX_VALUE;
+        if (ops.length == 0) {
+            return m * n;
+        }
+        for (int i = 0; i < ops.length; i++) {
+            if (ops[i][0] < xmin) {
+                xmin = ops[i][0];
+            }
+            if (ops[i][1] < ymin) {
+                ymin = ops[i][1];
+            }
+        }
+        return xmin * ymin;
     }
 
     /**
