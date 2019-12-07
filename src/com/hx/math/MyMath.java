@@ -1,9 +1,6 @@
 package com.hx.math;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author jxlgcmh
@@ -13,35 +10,57 @@ import java.util.List;
 public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
-        int [] arr ={1,2,3,4,4,3,2,1,1,1};
+        int[] arr = {1, 2, 3, 4, 4, 3, 2, 1, 1, 1, 1};
         System.out.println(instance.hasGroupsSizeX(arr));
     }
 
+    public List<Integer> powerfulIntegers(int x, int y, int bound) {
+        Set<Integer> set = new HashSet<>();
+
+        for (int a = 1; a < bound; a *= x) {
+            for (int b = 1; a + b <= bound; b *= y) {
+                set.add(a + b);
+                if (y == 1) {
+                    break;
+                }
+            }
+            if (x == 1) {
+                break;
+            }
+        }
+
+        return new ArrayList<>(set);
+    }
+
+    /**
+     * 卡牌分组
+     *
+     * @param deck
+     * @return
+     */
     public boolean hasGroupsSizeX(int[] deck) {
-        int len = deck.length;
+        int N = deck.length;
         int[] count = new int[10000];
         for (int c : deck) {
             count[c]++;
         }
-
-        List<Integer> values = new ArrayList<>();
+        List<Integer> values = new ArrayList();
         for (int i = 0; i < 10000; ++i) {
             if (count[i] > 0) {
                 values.add(count[i]);
             }
         }
-
-        for (int x = 2; x <= len; ++x) {
-            if (len % x == 0) {
+        search:
+        for (int X = 2; X <= N; ++X) {
+            if (N % X == 0) {
                 for (int v : values) {
-                    if (v % x != 0) {
-                        break;
+                    if (v % X != 0) {
+                        continue search;
                     }
                 }
                 return true;
             }
         }
-
         return false;
     }
 
