@@ -11,11 +11,141 @@ import java.util.HashMap;
 public class Array {
     public static void main(String[] args) {
         Array instance = new Array();
-        int[] nums = {7,1,5,6,4};
-        int target = 19;
+        int[] nums = {3, 2, Integer.MIN_VALUE};
+        int target = 2;
+        System.out.println(instance.thirdMaxII(nums));
+    }
 
-        System.out.println(instance.maxProfitII(nums));
 
+    /**
+     * [1,1,2]  2
+     * 2,2,1
+     *
+     * @param nums
+     * @return
+     */
+    public int thirdMax(int[] nums) {
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        if (nums.length == 2) {
+            return Math.max(nums[0], nums[1]);
+        }
+        int max1 = Integer.MIN_VALUE;
+        int max2 = Integer.MIN_VALUE;
+        int max3 = Integer.MIN_VALUE;
+        boolean flag = true;
+        int count = 0;
+        for (int num : nums) {
+            if (num == Integer.MIN_VALUE && flag) {
+                count++;
+                flag = false;
+            }
+            if (num > max1) {
+                count++;
+                //原先第二大传递给第三大
+                max3 = max2;
+                //原先最大值传递给第二大
+                max2 = max1;
+                //更新最大值
+                max1 = num;
+            } else if (num > max2 && num < max1) {
+                count++;
+                max3 = max2;
+                max2 = num;
+            } else if (num > max3 && num < max2) {
+                count++;
+                max3 = num;
+            }
+        }
+        return count >= 3 ? max3 : max1;
+    }
+
+
+    /**
+     * 第三大的数
+     * @param nums
+     * @return
+     */
+    public int thirdMaxII(int[] nums) {
+        int first = Integer.MIN_VALUE;
+        int second = Integer.MIN_VALUE;
+        int third = Integer.MIN_VALUE;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]>first){
+                third=second;
+                second=first;
+                first=nums[i];
+            }
+            if(nums[i]<first&&nums[i]>second){
+                third=second;
+                second=nums[i];
+            }
+            if(nums[i]<second&&nums[i]>third){
+                third=nums[i];
+            }
+        }
+        if(third==Integer.MIN_VALUE)
+            return first;
+        return third;
+
+    }
+
+    public int thirdMaxIII(int[] nums) {
+        int first=Integer.MIN_VALUE,second=Integer.MIN_VALUE,third=Integer.MIN_VALUE;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]>first){
+                third=second;
+                second=first;
+                first=nums[i];
+            }
+            if(nums[i]<first&&nums[i]>second){
+                third=second;
+                second=nums[i];
+            }
+            if(nums[i]<second&&nums[i]>third){
+                third=nums[i];
+            }
+        }
+        if(third==Integer.MIN_VALUE)
+            return first;
+        return third;
+    }
+
+    /**
+     * 数组中重复的数字，下标不能超过k值
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] == nums[j] && j - i <= k) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 是否存在重复元素
+     *
+     * @param nums
+     * @return
+     */
+    public boolean containsDuplicate(int[] nums) {
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] == nums[j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

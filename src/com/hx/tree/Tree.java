@@ -35,6 +35,17 @@ public class Tree {
         instance.sortedArrayToBST(arr);
     }
 
+    public void build(){
+        TreeNode root = new TreeNode(10);
+        for (int i = 1; i <=10 ; i++) {
+            root.right=new TreeNode(root.val*2);
+            root.left=new TreeNode(root.val -i);
+        }
+    }
+
+
+
+
 
     /**
      * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
