@@ -10,13 +10,61 @@ import java.util.*;
 public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
-        int[] arr = {1, 2, 3, 4, 4, 3, 2, 1, 1, 1, 1};
-        System.out.println(instance.hasGroupsSizeX(arr));
+        int[] arr = {1, 2, 3};
+        System.out.println(instance.minMovesII(arr));
     }
 
+    /**
+     * 矩形重叠
+     * @param rec1
+     * @param rec2
+     * @return
+     * https://leetcode-cn.com/problems/rectangle-overlap/
+     */
+    public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
+        return false;
+    }
+
+
+
+    /**
+     * 给定一个长度为 n 的非空整数数组，找到让数组所有元素相等的最小移动次数。每次移动可以使 n - 1 个元素增加 1。
+     * [1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
+     *
+     * @param nums
+     * @return 链接：https://leetcode-cn.com/problems/minimum-moves-to-equal-array-elements/solution/zui-xiao-yi-dong-ci-shu-shi-shu-zu-yuan-su-xiang-d/
+     */
+    public int minMoves(int[] nums) {
+        Arrays.sort(nums);
+        int count = 0;
+        for (int i = nums.length - 1; i > 0; i--) {
+            count += nums[i] - nums[0];
+        }
+        return count;
+    }
+
+    public int minMovesII(int[] nums) {
+        int min = Integer.MAX_VALUE;
+        int res = 0;
+        for (int num : nums) {
+            if (num < min) {
+                min = num;
+            }
+            res += num;
+        }
+        res = res - min * nums.length;
+        return res;
+    }
+
+
+    /**
+     * @param x
+     * @param y
+     * @param bound
+     * @return
+     */
     public List<Integer> powerfulIntegers(int x, int y, int bound) {
         Set<Integer> set = new HashSet<>();
-
         for (int a = 1; a < bound; a *= x) {
             for (int b = 1; a + b <= bound; b *= y) {
                 set.add(a + b);
@@ -68,7 +116,6 @@ public class MyMath {
     /**
      * 三角形最大面积
      * 链接：https://leetcode-cn.com/problems/largest-triangle-area/solution/zui-da-san-jiao-xing-mian-ji-by-leetcode/
-     *
      * @param points
      * @return
      */
@@ -89,7 +136,6 @@ public class MyMath {
         return 0.5 * Math.abs(P[0] * Q[1] + Q[0] * R[1] + R[0] * P[1]
                 - P[1] * Q[0] - Q[1] * R[0] - R[1] * P[0]);
     }
-
 
     /**
      * 自除数 是指可以被它包含的每一位数除尽的数。
@@ -151,9 +197,9 @@ public class MyMath {
 
 
     /**
+     * 平方数之和
      * 给定一个非负整数 c ，你要判断是否存在两个整数 a 和 b，使得 a2 + b2 = c。
      * 链接：https://leetcode-cn.com/problems/sum-of-square-numbers/solution/ping-fang-shu-zhi-he-by-leetcode/
-     *
      * @param c
      * @return
      */
@@ -166,7 +212,6 @@ public class MyMath {
         }
         return false;
     }
-
     private boolean binarySearch(long s, long e, int n) {
         if (s > e) {
             return false;
