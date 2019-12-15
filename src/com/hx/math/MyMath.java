@@ -10,21 +10,52 @@ import java.util.*;
 public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
-        int[] arr = {1, 2, 3};
-        System.out.println(instance.minMovesII(arr));
+
+        System.out.println(instance.binaryGap(22));
     }
 
     /**
-     * 矩形重叠
-     * @param rec1
-     * @param rec2
-     * @return
-     * https://leetcode-cn.com/problems/rectangle-overlap/
+     * 868 二级制间距
+     * @param N
+     * @return 链接：https://leetcode-cn.com/problems/binary-gap/solution/er-jin-zhi-jian-ju-by-leetcode/
      */
-    public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
-        return false;
+    public int binaryGap(int N) {
+        int[] A = new int[32];
+        int t = 0;
+        for (int i = 0; i < 32; ++i) {
+            if (((N >> i) & 1) != 0) {
+                A[t++] = i;
+            }
+        }
+
+        int ans = 0;
+        for (int i = 0; i < t - 1; ++i) {
+            ans = Math.max(ans, A[i + 1] - A[i]);
+        }
+        return ans;
     }
 
+
+    /**
+     * 矩形重叠
+     *
+     * @param rec1
+     * @param rec2
+     * @return https://leetcode-cn.com/problems/rectangle-overlap/
+     */
+    public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
+        return rec1[0] < rec2[2]
+                && rec2[0] < rec1[2]
+                && rec1[1] < rec2[3]
+                && rec2[1] < rec1[3];
+    }
+
+    public boolean isRectangleOverlapII(int[] rec1, int[] rec2) {
+        return !(rec1[2] <= rec2[0] ||   // left
+                rec1[3] <= rec2[1] ||   // bottom
+                rec1[0] >= rec2[2] ||   // right
+                rec1[1] >= rec2[3]);    // top
+    }
 
 
     /**
@@ -116,6 +147,7 @@ public class MyMath {
     /**
      * 三角形最大面积
      * 链接：https://leetcode-cn.com/problems/largest-triangle-area/solution/zui-da-san-jiao-xing-mian-ji-by-leetcode/
+     *
      * @param points
      * @return
      */
@@ -200,6 +232,7 @@ public class MyMath {
      * 平方数之和
      * 给定一个非负整数 c ，你要判断是否存在两个整数 a 和 b，使得 a2 + b2 = c。
      * 链接：https://leetcode-cn.com/problems/sum-of-square-numbers/solution/ping-fang-shu-zhi-he-by-leetcode/
+     *
      * @param c
      * @return
      */
@@ -212,6 +245,7 @@ public class MyMath {
         }
         return false;
     }
+
     private boolean binarySearch(long s, long e, int n) {
         if (s > e) {
             return false;
