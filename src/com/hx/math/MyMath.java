@@ -11,11 +11,120 @@ public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
 
-        System.out.println(instance.binaryGap(22));
+        System.out.println(instance.largestPerimeter(new int[]{3, 2, 3, 4}));
+    }
+
+    /**
+     * 三角形的最大周长
+     * [超时]  见下题
+     *
+     * @param A
+     * @return https://leetcode-cn.com/problems/largest-perimeter-triangle/
+     */
+    public int largestPerimeter(int[] A) {
+        int perimeter = 0;
+        int len = A.length;
+        // 长度小于3  不能组成三角形
+        if (len < 3) {
+            return 0;
+        }
+        for (int i = 0; i < len; i++) {
+            for (int j = i + 1; j < len; j++) {
+                for (int k = j + 1; k < len; k++) {
+                    if (A[i] + A[j] > A[k] && A[i] + A[k] > A[j] && A[k] + A[j] > A[i]) {
+                        perimeter = Math.max(perimeter, A[i] + A[j] + A[k]);
+                    }
+                }
+            }
+        }
+        return perimeter;
+    }
+
+    public int largestPerimeterII(int[] A) {
+        Arrays.sort(A);
+        int len = A.length;
+        for (int i = len - 3; i >= 0; i--) {
+            if (A[i] + A[i + 1] > A[i + 2]) {
+                return A[i] + A[i + 1] + A[i + 2];
+            }
+        }
+        return 0;
+    }
+
+
+    /**
+     * 给定数字能组成的最大时间
+     *
+     * @param A
+     * @return https://leetcode-cn.com/problems/largest-time-for-given-digits/
+     */
+    public String largestTimeFromDigits(int[] A) {
+        int res = -1;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (j != i) {
+                    for (int k = 0; k < 4; k++) {
+                        if (k != i && k != j) {
+                            // 有if的判断处理不会产生数组下标越界
+                            int l = 6 - i - j - k;
+                            int hour = 10 * A[i] + A[j];
+                            int min = 10 * A[k] + A[l];
+                            if (hour < 24 && min < 60) {
+                                res = Math.max(res, hour * 60 + min);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res >= 0 ? String.format("%02d:%02d", res / 60, res % 60) : "";
+    }
+
+    /**
+     * 增减字符串匹配
+     *
+     * @param S
+     * @return https://leetcode-cn.com/problems/di-string-match/
+     */
+    public int[] diStringMatch(String S) {
+        int len = S.length();
+        int low = 0;
+        int fast = len;
+        int[] arr = new int[len + 1];
+        char[] chars = S.toCharArray();
+        for (int i = 0; i < len; i++) {
+            if (chars[i] == 'I') {
+                arr[i] = low++;
+            } else {
+                arr[i] = fast--;
+            }
+
+        }
+        arr[len] = low;
+        return arr;
+    }
+
+    /**
+     * 最小差值 901
+     *
+     * @param A
+     * @param K
+     * @return https://leetcode-cn.com/problems/smallest-range-i/
+     */
+    public int smallestRangeI(int[] A, int K) {
+        int max = A[0];
+        int min = A[0];
+        for (int i : A) {
+            max = Math.max(max, i);
+            min = Math.min(min, i);
+        }
+        // 如果出现结果为负数，最大差值为0
+        return Math.max(0, max - min - 2 * K);
     }
 
     /**
      * 868 二级制间距
+     *
      * @param N
      * @return 链接：https://leetcode-cn.com/problems/binary-gap/solution/er-jin-zhi-jian-ju-by-leetcode/
      */

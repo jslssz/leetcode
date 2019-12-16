@@ -15,8 +15,21 @@ public class Binary {
     public static void main(String[] args) {
         Binary instance = new Binary();
         //
-        System.out.println(instance.letterCasePermutation("a1b2"));
+        System.out.println(instance.bitwiseComplement(5));
     }
+
+    public int bitwiseComplement(int N) {
+        int tmp = N;
+        int res =1;
+        while (tmp > 0) {
+            tmp >>= 1;
+            res <<=1;
+        }
+        return N ^ (res-1);
+    }
+
+
+
 
     /**
      * 链接：https://leetcode-cn.com/problems/letter-case-permutation/solution/zi-mu-da-xiao-xie-quan-pai-lie-by-leetcode/
