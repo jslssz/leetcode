@@ -11,7 +11,100 @@ public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
 
-        System.out.println(instance.largestPerimeter(new int[]{3, 2, 3, 4}));
+        int i = instance.dayOfYear("2016-02-29");
+    }
+
+
+    /**
+     * 每年的第几天
+     *
+     * @param date  "1976-01-24"      "2016-02-29"
+     * @return
+     */
+    public int dayOfYear(String date) {
+        int[] arr = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        String[] split = date.split("-");
+
+        int day = Integer.parseInt(split[2]);
+
+        int month = Integer.parseInt(split[1]);
+
+        if (isLeapYear(split[0]) && month > 2 ) {
+            day += 1;
+        }
+        for (int i = 0; i < month - 1; i++) {
+            day += arr[i];
+        }
+        return day;
+
+    }
+
+    private boolean isLeapYear(String stringYear) {
+        int year = Integer.parseInt(stringYear);
+        return (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0));
+    }
+
+
+    /**
+     * 分糖果
+     *
+     * @param candies
+     * @param num_people
+     * @return https://leetcode-cn.com/problems/distribute-candies-to-people/
+     */
+    public int[] distributeCandies(int candies, int num_people) {
+        int[] arr = new int[num_people];
+        int n = 0;
+        while (candies > 0) {
+            for (int i = 1; i <= num_people; i++) {
+                if (candies > i + n * num_people) {
+                    arr[i - 1] += i + n * num_people;
+                } else {
+                    arr[i - 1] += candies;
+                }
+                candies -= (i + n * num_people);
+                if (candies <= 0) {
+                    break;
+                }
+            }
+            n++;
+        }
+        return arr;
+    }
+
+
+    /**
+     * 有效的回旋镖
+     * 采用斜率的方式：这里有一个聪敏的地方，就是斜率的分母可能为零，则改为乘积的方式
+     *
+     * @param points
+     * @return
+     */
+    public boolean isBoomerang(int[][] points) {
+        return (points[1][1] - points[0][1]) * (points[2][0] - points[0][0]) != (points[2][1] - points[0][1]) * (points[1][0] - points[0][0]);
+    }
+
+
+    /**
+     * 除数博弈
+     *
+     * @param N
+     * @return https://leetcode-cn.com/problems/divisor-game/
+     */
+    public boolean divisorGame(int N) {
+        int count = 0;
+        int temp = 0;
+        while (N > 1) {
+            for (int i = 1; i < N; i++) {
+                if (N % i == 0) {
+                    temp = i;
+                    count++;
+                    break;
+                }
+            }
+            N -= temp;
+        }
+        return count % 2 == 1;
     }
 
     /**
