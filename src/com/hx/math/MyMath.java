@@ -11,14 +11,147 @@ public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
 
-        int i = instance.dayOfYear("2016-02-29");
+        System.out.println(instance.subtractProductAndSum(234));
+    }
+
+    /**
+     * @param n
+     * @return
+     */
+    public int subtractProductAndSum(int n) {
+        int temp1 = 0;
+        int temp2 = 1;
+        while (n > 0) {
+            int n1 = n % 10;
+            temp1 += n1;
+            temp2 *= n1;
+            n = n / 10;
+        }
+        return temp2 - temp1;
+    }
+
+
+    /**
+     * 缀点成线
+     *
+     * @param coordinates
+     * @return 链接：https://leetcode-cn.com/problems/check-if-it-is-a-straight-line/solution/qiu-xie-lu-by-user8064p/
+     */
+    public boolean checkStraightLine(int[][] coordinates) {
+        int[] arr1 = coordinates[0];
+        int[] arr2 = coordinates[1];
+        // 获取第一个点的坐标
+        int initX = arr1[0];
+        int initY = arr1[1];
+
+        // 获取第二个点的坐标
+        int xDistance = arr2[0] - initX;
+        int yDistance = arr2[1] - initY;
+
+        // 从第三个点开始遍历
+        for (int i = 2; i < coordinates.length; i++) {
+            int[] curArr = coordinates[i];
+            int curX = curArr[0];
+            int curY = curArr[1];
+            // 如果一二个点的高度差为0
+            if (yDistance == 0) {
+                // 同时第三个点和第一个点的距离不为0  返回false
+                if (curY - initY != 0) {
+                    return false;
+                }
+            }
+            // 如果一二个点的高度差不为0
+            else {
+                // 同时第三个点和第一个点的高度为0  返回false
+                if (curY - initY == 0) {
+                    return false;
+                }
+                if (((curX - initX) / (curY - initY)) != (xDistance / yDistance)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public boolean checkStraightLineII(int[][] coordinates) {
+        int x1 = coordinates[1][0] - coordinates[0][0];
+        int y1 = coordinates[1][1] - coordinates[0][1];
+        for (int i = 2; i < coordinates.length; i++) {
+            int x2 = coordinates[i][0] - coordinates[i - 1][0];
+            int y2 = coordinates[i][1] - coordinates[i - 1][1];
+            if (x1 * y2 != x2 * y1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 玩筹码
+     *
+     * @param chips
+     * @return
+     */
+    public int minCostToMoveChips(int[] chips) {
+        int odd = 0, even = 0;
+        for (int i = 0; i < chips.length; i++) {
+            if (chips[i] % 2 == 0) {
+                even++;
+            } else if (chips[i] % 2 != 0) {
+                odd++;
+            }
+        }
+        return Math.min(even, odd);
+    }
+
+
+    /**
+     * @param n
+     * @return https://leetcode-cn.com/problems/prime-arrangements/solution/javajian-ji-ban-ji-you-hua-by-dreshadow/
+     */
+    public int numPrimeArrangements(int n) {
+        if (n < 3) {
+            return 1;
+        }
+        int count = 0;
+        boolean[] nums = new boolean[n + 1];
+        for (int i = 2; i * i < nums.length; i++) {
+            if (!nums[i]) {
+                for (int j = i * i; j < nums.length; j += i) {
+                    if (nums[j])
+                        continue;
+                    nums[j] = true;
+                    count++;
+                }
+            }
+        }
+        // 非质数的数量(加1：元素1不包含在内)
+        count++;
+
+        // 8以内的质数个数多于非质数
+        if (n < 8)
+            count = n - count;
+
+        // 结果
+        long res = 1;
+        for (int i = 2; i <= count; i++) {
+            res = (res * i) % 1000000007;
+            // 这里判断会减少一轮遍历
+            if (i == n - count) {
+                res = (res * res) % 1000000007;
+            }
+        }
+        return (int) res;
     }
 
 
     /**
      * 每年的第几天
      *
-     * @param date  "1976-01-24"      "2016-02-29"
+     * @param date "1976-01-24"      "2016-02-29"
      * @return
      */
     public int dayOfYear(String date) {
@@ -29,7 +162,7 @@ public class MyMath {
 
         int month = Integer.parseInt(split[1]);
 
-        if (isLeapYear(split[0]) && month > 2 ) {
+        if (isLeapYear(split[0]) && month > 2) {
             day += 1;
         }
         for (int i = 0; i < month - 1; i++) {
