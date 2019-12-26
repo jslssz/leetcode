@@ -1,6 +1,7 @@
 package com.hx.binary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,14 +11,88 @@ import java.util.List;
  * '&' 与运算相当与乘发法运算，1&1=1；1&0=0；0&0=0；
  * '|' 或运算相当于加法运算，1|1=1；1|0=1；0|0=0；
  * '^' 异或运算时同出0；异出1；1^1=0;1^0=1;0^0=0;
+ * '~' 取反    ~5
+ * 正数的反码还是等于原码  正数的补码等于他的原码
+ * 负数的反码就是他的原码除符号位外，按位取反  负数的补码等于反码+1
  */
 public class Binary {
+
     public static void main(String[] args) {
         Binary instance = new Binary();
         //
-        System.out.println(instance.bitwiseComplement(5));
+     System.out.println(Arrays.toString(instance.singleNumberIII(new int[]{2, 2, 3,3, 4,5})));
     }
 
+    /**
+     *
+     * @param nums
+     * @return
+     * 链接：https://leetcode-cn.com/problems/single-number-iii/solution/yi-huo-yun-suan-by-jason-2/
+     */
+    public int[] singleNumberIII(int[] nums) {
+        int s = 0;
+        for(int x : nums){
+            s ^=x;
+        }
+        int lowbit = s & -s;
+
+        int a=0,b=0;
+        for(int x:nums){
+            if((x & lowbit) == lowbit){
+                a^=x;
+            }else{
+                b^=x;
+            }
+        }
+        return new int[]{a,b};
+
+    }
+
+
+
+
+
+    /**
+     *只出现一次的数字 II
+     * @param nums
+     * @return
+     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现了三次。找出那个只出现了一次的元素。
+     */
+    public int singleNumberII(int[] nums) {
+        int ones = 0, twos = 0;
+        for(int num : nums){
+            ones = ones ^ num & ~twos;
+            twos = twos ^ num & ~ones;
+        }
+        return ones;
+    }
+
+    /**
+     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     * 交换律：a ^ b ^ c 等价于 a ^ c ^ b
+     * <p>
+     * 任何数于0异或为任何数 0 ^ n 等于 n
+     * <p>
+     * 相同的数异或为0: n ^ n 等于 0
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNumber(int[] nums) {
+        int num = 0;
+        for (int i = 0; i < nums.length; i++) {
+            //异或0001 ^ 0010 = 0011
+            // 同为0，异为1
+            num = num ^ nums[i];
+        }
+        return num;
+    }
+    /**
+     * 十进制整数的反码
+     * @param N
+     * @return
+     * https://leetcode-cn.com/problems/complement-of-base-10-integer/
+     */
     public int bitwiseComplement(int N) {
         int tmp = N;
         int res =1;
@@ -27,9 +102,6 @@ public class Binary {
         }
         return N ^ (res-1);
     }
-
-
-
 
     /**
      * 链接：https://leetcode-cn.com/problems/letter-case-permutation/solution/zi-mu-da-xiao-xie-quan-pai-lie-by-leetcode/

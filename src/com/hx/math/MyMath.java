@@ -121,8 +121,9 @@ public class MyMath {
         for (int i = 2; i * i < nums.length; i++) {
             if (!nums[i]) {
                 for (int j = i * i; j < nums.length; j += i) {
-                    if (nums[j])
+                    if (nums[j]) {
                         continue;
+                    }
                     nums[j] = true;
                     count++;
                 }
@@ -132,9 +133,9 @@ public class MyMath {
         count++;
 
         // 8以内的质数个数多于非质数
-        if (n < 8)
+        if (n < 8) {
             count = n - count;
-
+        }
         // 结果
         long res = 1;
         for (int i = 2; i <= count; i++) {

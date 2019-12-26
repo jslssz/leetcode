@@ -1,5 +1,10 @@
 package com.hx.string;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author jxlgcmh
  * @date 2019-11-14 12:21
@@ -9,11 +14,246 @@ public class MyString {
 
     public static void main(String[] args) {
         MyString instance = new MyString();
-        String s = "leetcode";
-        String s2 = "Aa";
-        String s3 = "!!!";
-        String s4 = "hello";
-        System.out.println(instance.reverseVowels(s));
+
+        System.out.println(instance.reverseStr("abcdefg",2));
+    }
+
+    /**
+     * @param s
+     * @param k
+     * @return 链接：https://leetcode-cn.com/problems/reverse-string-ii/solution/fan-zhuan-zi-fu-chuan-ii-by-leetcode/
+     */
+    public String reverseStr(String s, int k) {
+        char[] a = s.toCharArray();
+        for (int start = 0; start < a.length; start += 2 * k) {
+            int i = start, j = Math.min(start + k - 1, a.length - 1);
+            while (i < j) {
+                char tmp = a[i];
+                a[i++] = a[j];
+                a[j--] = tmp;
+            }
+        }
+        return new String(a);
+    }
+
+
+    /**
+     * 最长特殊序列
+     *
+     * @param a
+     * @param b
+     * @return 链接：https://leetcode-cn.com/problems/longest-uncommon-subsequence-i/solution/qi-xi-suan-fa-521-zui-chang-te-shu-xu-lie-i-by-gua/
+     */
+    public int findLUSlength(String a, String b) {
+        if (a.equals(b))
+            return -1;
+        return Math.max(a.length(), b.length());
+    }
+
+
+    /**
+     * 单词拼写是否正确
+     *
+     * @param word
+     * @return
+     */
+    public boolean detectCapitalUse(String word) {
+        char[] chars = word.toCharArray();
+        int len = chars.length;
+        if (len == 1) {
+            return true;
+        }
+        if (len == 2) {
+            if (chars[0] > 'a') {
+                return chars[1] >= 'a';
+            } else {
+                return true;
+            }
+        }
+        char first = chars[0];
+        // 大写字母开头
+        if (first >= 'A' && first <= 'Z') {
+            for (int i = 2; i < len; i++) {
+                // 第二个也是大写字母a
+                if (chars[1] <= 'Z') {
+                    if (chars[i] > 'Z') {
+                        return false;
+                    }
+                } else {
+                    if (chars[i] < 'a') {
+                        return false;
+                    }
+                }
+            }
+        }
+        //非大写字母开头
+        else {
+            for (int i = 1; i < len; i++) {
+                if (chars[i] < 'a') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 重复的子字符串
+     *
+     * @param s
+     * @return
+     */
+    public boolean repeatedSubstringPattern(String s) {
+        int len = s.length();
+        for (int i = len / 2; i > 0; i--) { // i=4,3,2,1
+            if (len % i != 0)
+                continue;
+            boolean flag = true;
+            for (int j = len / i; j > 1; j--) { // 3,2
+                if (!s.substring(0, i).equals(s.substring((j - 1) * i, j * i))) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 压缩字符串
+     *
+     * @param chars
+     * @return https://leetcode-cn.com/problems/string-compression/
+     */
+    public int compress(char[] chars) {
+        // read 标记读的位置，write标记写的位置 ，anchor 锚的意思  保留指针 anchor，指向当前读到连续字符串的起始位置。
+        int anchor = 0, write = 0;
+        for (int read = 0; read < chars.length; read++) {
+            if (read + 1 == chars.length || chars[read + 1] != chars[read]) {
+                chars[write++] = chars[anchor];
+                if (read > anchor) {
+                    for (char c : ("" + (read - anchor + 1)).toCharArray()) {
+                        chars[write++] = c;
+                    }
+                }
+                anchor = read + 1;
+            }
+        }
+        return write;
+    }
+
+    /**
+     * 统计字符串单词的个数
+     * 统计字符串中的单词个数，这里的单词指的是连续的【不是空格】的字符。
+     *
+     * @param s
+     * @return
+     */
+    public int countSegments(String s) {
+        int count = 0;
+        String[] strs = s.split(" ");
+        for (String str : strs) {
+            if (!"".equals(str)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 字符相加
+     *
+     * @param num1
+     * @param num2
+     * @return 链接：https://leetcode-cn.com/problems/add-strings/solution/add-strings-shuang-zhi-zhen-fa-by-jyd/
+     */
+    public String addStrings(String num1, String num2) {
+        StringBuilder res = new StringBuilder("");
+        int i = num1.length() - 1, j = num2.length() - 1, carry = 0;
+        while (i >= 0 || j >= 0) {
+            int n1 = i >= 0 ? num1.charAt(i) - '0' : 0;
+            int n2 = j >= 0 ? num2.charAt(j) - '0' : 0;
+            int tmp = n1 + n2 + carry;
+            carry = tmp / 10;
+            res.append(tmp % 10);
+            i--;
+            j--;
+        }
+        if (carry == 1) {
+            res.append(1);
+        }
+        return res.reverse().toString();
+    }
+
+
+    /**
+     * 字符串中的第一个唯一字符
+     *
+     * @param s
+     * @return 时间复杂度  O(n)=2*n;
+     */
+    public int firstUniqChar(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        int[] arr = new int[26];
+        for (char ch : chars) {
+            arr[ch - 'a']++;
+        }
+        for (int i = 0; i < len; i++) {
+            if (arr[chars[i] - 'a'] == 1) {
+                return i;
+            }
+        }
+        return -1;
+
+    }
+
+    /**
+     * 赎金信
+     *
+     * @param ransomNote
+     * @param magazine
+     * @return
+     */
+    public boolean canConstruct(String ransomNote, String magazine) {
+        int[] b = new int[26];
+        for (char c : magazine.toCharArray()) {
+            b[c - 'a']++;
+        }
+        for (char c : ransomNote.toCharArray()) {
+            if (b[c - 'a'] == 0) {
+                return false;
+            }
+            b[c - 'a']--;
+        }
+        return true;
+    }
+
+    /**
+     * 所有 DNA 都由一系列缩写为 A，C，G 和 T 的核苷酸组成，例如：“ACGAATTCCG”。在研究 DNA 时，识别 DNA 中的重复序列有时会对研究非常有帮助。
+     * 编写一个函数来查找 DNA 分子中所有出现超过一次的 10 个字母长的序列（子串）。
+     * 链接：https://leetcode-cn.com/problems/repeated-dna-sequences
+     *
+     * @param s
+     * @return
+     */
+    public List<String> findRepeatedDnaSequences(String s) {
+        int len = s.length();
+        Set<String> res = new HashSet<>();
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i <= len - 10; i++) {
+            String key = s.substring(i, i + 10);
+            //之前是否存在
+            if (set.contains(key)) {
+                res.add(key);
+            } else {
+                set.add(key);
+            }
+
+        }
+        return new ArrayList<>(res);
     }
 
 

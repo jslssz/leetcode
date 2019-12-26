@@ -13,19 +13,101 @@ public class List {
         List instance = new List();
         ListNode listNode1 = new ListNode(1);
         ListNode listNode2 = new ListNode(2);
-        ListNode listNode3 = new ListNode(3);
+        ListNode listNode3 = new ListNode(2);
         listNode1.next = listNode2;
         listNode2.next = listNode3;
-        ListNode listNode4 = new ListNode(4);
-        ListNode listNode5 = new ListNode(5);
+        ListNode listNode4 = new ListNode(3);
+        ListNode listNode5 = new ListNode(3);
         ListNode listNode6 = new ListNode(6);
 //         测试使用  记得删除
-        listNode3.next=listNode4;
+        listNode3.next = listNode4;
         listNode4.next = listNode5;
         listNode5.next = listNode6;
 
-        instance.reverseBetween(listNode1,2,4);
+        instance.reversePrint(listNode1);
     }
+
+    /**
+     * 删除排序链表中的重复元素
+     *
+     * @param head 1->2->3->3->4->4->5
+     * @return 1->2->5
+     * https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/
+     */
+    public ListNode deleteDuplicatesII(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode realHead = new ListNode(-1);
+        ListNode tempHead = realHead;
+        realHead.next=head;
+
+        while (head != null && head.next != null) {
+            if (head.val != head.next.val) {
+                tempHead = head;
+                head = head.next;
+            } else {
+                while (head.next != null && head.val == head.next.val) {
+                    head = head.next;
+                }
+                tempHead.next = head.next;
+                head = head.next;
+            }
+        }
+
+        return realHead.next;
+    }
+
+
+    /**
+     * 旋转链表
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        // 将链表组合成一个环
+        ListNode next = head;
+        int n = 0;
+        while (next.next != null) {
+            n += 1;
+            next = next.next;
+        }
+        //尾巴指向头
+        next.next = head;
+        ListNode curr = head;
+        for (int i = 0; i < n - k % n - 1; i++) {
+            curr = curr.next;
+        }
+
+        ListNode newHead = curr.next;
+        // 断开环
+        curr.next = null;
+
+        return newHead;
+    }
+
+
+    /**
+     * 两两交换链表中的节点
+     *
+     * @param head
+     * @return https://leetcode-cn.com/problems/swap-nodes-in-pairs/
+     */
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode next = head.next;
+        head.next = swapPairs(next.next);
+        next.next = head;
+        return next;
+    }
+
 
     /**
      * 链接：https://leetcode-cn.com/problems/reverse-linked-list-ii/solution/zhao-dao-mhao-jie-dian-de-qian-yi-ge-jie-dian-zai-/
@@ -271,13 +353,22 @@ public class List {
     public ListNode reverseList(ListNode head) {
         ListNode temp = null;
         ListNode next = null;
-        while(head !=null){
-            next =head.next;
+        while (head != null) {
+            next = head.next;
             head.next = temp;
             temp = head;
-            head =next;
+            head = next;
         }
         return temp;
+    }
+
+
+    public void reversePrint(ListNode head) {
+        if (head == null) {
+            return ;
+        }
+        reversePrint(head.next);
+        System.out.println(head);
     }
 
     /**
@@ -362,7 +453,7 @@ public class List {
      *
      * @param l1 链表1
      * @param l2 链表2
-     * @return
+     * @return https://leetcode-cn.com/problems/merge-two-sorted-lists/submissions/
      */
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         if (l1 == null) {

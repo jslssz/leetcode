@@ -1,7 +1,9 @@
 package com.hx.arr;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author jxlgcmh
@@ -11,15 +13,46 @@ import java.util.HashMap;
 public class Array {
     public static void main(String[] args) {
         Array instance = new Array();
-        int[] nums = {3, 2, Integer.MIN_VALUE};
-        int target = 2;
-        System.out.println(instance.thirdMaxII(nums));
+        int[] nums = {3, 2, 2,2};
     }
 
 
+
+
     /**
-     * [1,1,2]  2
-     * 2,2,1
+     *作为子集的成员变量
+     *
+     */
+    private List<List<Integer>> resultList = new ArrayList<>();
+    /**
+     * 子集 78
+     * @param nums
+     * @return 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+     *https://leetcode-cn.com/problems/subsets/
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return resultList;
+        }
+        List<Integer> list =new ArrayList<>();
+        process(list,nums,0);
+        return resultList;
+    }
+
+    private void process(List<Integer> list, int[] nums, int start) {
+        resultList.add(new ArrayList<>(list));
+        for (int i = start; i <nums.length ; i++) {
+            list.add(nums[i]);
+            process(list,nums,i+1);
+            list.remove(list.size()-1);
+        }
+    }
+
+    //============难======度========分==========割========线===================================
+
+
+    /**
+     * 第三大的数
      *
      * @param nums
      * @return
@@ -85,8 +118,9 @@ public class Array {
                 third=nums[i];
             }
         }
-        if(third==Integer.MIN_VALUE)
+        if(third==Integer.MIN_VALUE) {
             return first;
+        }
         return third;
 
     }
@@ -107,8 +141,9 @@ public class Array {
                 third=nums[i];
             }
         }
-        if(third==Integer.MIN_VALUE)
+        if(third==Integer.MIN_VALUE) {
             return first;
+        }
         return third;
     }
 
@@ -383,26 +418,7 @@ public class Array {
         return queue[0];
     }
 
-    /**
-     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
-     * 交换律：a ^ b ^ c 等价于 a ^ c ^ b
-     * <p>
-     * 任何数于0异或为任何数 0 ^ n 等于 n
-     * <p>
-     * 相同的数异或为0: n ^ n 等于 0
-     *
-     * @param nums
-     * @return
-     */
-    public int singleNumber(int[] nums) {
-        int num = 0;
-        for (int i = 0; i < nums.length; i++) {
-            //异或0001 ^ 0010 = 0011
-            // 同为0，异为1
-            num = num ^ nums[i];
-        }
-        return num;
-    }
+
 
 
     /**
