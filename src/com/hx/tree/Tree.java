@@ -1,6 +1,7 @@
 package com.hx.tree;
 
 import com.hx.list.ListNode;
+import com.hx.string.MyString;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,7 +33,8 @@ public class Tree {
         Tree instance = new Tree();
 //        instance.levelOrderBottom(root);
         int [] arr ={-10,-3,0,5,9};
-        instance.sortedArrayToBST(arr);
+        MyString myString =new MyString();
+        myString.tree2str(root);
     }
 
     public void build(){
@@ -206,4 +208,14 @@ public class Tree {
         }
         return false;
     }
+
+    public void preOrder(TreeNode root) {
+        if (root != null) {
+            System.out.println(root.val);
+        }
+        if (root.left !=null) preOrder(root.left);
+        if (root.right !=null) preOrder(root.right);
+
+    }
+
 }

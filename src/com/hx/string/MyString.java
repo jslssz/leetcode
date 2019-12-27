@@ -1,5 +1,7 @@
 package com.hx.string;
 
+import com.hx.tree.TreeNode;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +17,124 @@ public class MyString {
     public static void main(String[] args) {
         MyString instance = new MyString();
 
-        System.out.println(instance.reverseStr("abcdefg",2));
+        System.out.println(instance.toLowerCase("Hello"));
     }
+
+
+    /**
+     * 实现lowercase功能
+     * @param str
+     * @return
+     */
+    public String toLowerCase(String str) {
+        char[] chars = str.toCharArray();
+        StringBuilder sb= new StringBuilder();
+        for (char ch : chars) {
+            if (ch >=65 &&  ch <= 90){
+                sb.append((char) (ch - 32));
+            }else {
+                sb.append(ch);
+            }
+        }
+        return sb.toString();
+    }
+
+
+    /**
+     * 机器人是否能返回原点
+     * @param moves
+     * @return
+     */
+    public boolean judgeCircle(String moves) {
+        int du =0;
+        int lr=0;
+        char[] chars = moves.toCharArray();
+        for (char ch : chars) {
+            if (ch == 'U') du++;
+            else if (ch == 'D') du--;
+            else if (ch == 'R') lr++;
+            else if (ch == 'L') lr--;
+        }
+        return du ==0 && lr ==0;
+    }
+
+
+
+
+    /**
+     *树转成字符串
+     * @param t
+     * @return
+     */
+    public String tree2str(TreeNode t) {
+        // 如果当前节点为null，返回空字符串
+        if (t == null)  return "";
+        // 如果当前节点没有孩子，那我们不需要在节点后面加上任何括号；
+        if (t.right ==null && t.left ==null) return t.val+"";
+        // 如果当前节点只有左孩子，那我们在递归时，只需要在左孩子的结果外加上一层括号，而不需要给右孩子加上任何括号
+        if (t.right ==null) return t.val +"("+tree2str(t.left)+")";
+        // 如果当前节点有两个孩子，那我们在递归时，需要在两个孩子的结果外都加上一层括号；
+        return t.val+"("+tree2str(t.left)+")("+tree2str(t.right)+")";
+    }
+
+
+
+
+    /**
+     * 反转字符串III
+     * @param s
+     * @return
+     */
+    public String reverseWords(String s) {
+        String[] split = s.split(" ");
+        StringBuilder sb =new StringBuilder();
+        for (String tmp : split) {
+            String s1 = reverseStringOneWord(tmp);
+            sb.append(s1).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
+    private String reverseStringOneWord(String str) {
+        char[] s= str.toCharArray();
+        int len = s.length;
+        for (int i = 0; i < len / 2; i++) {
+            char temp = s[len - 1 - i];
+            s[len - 1 - i] = s[i];
+            s[i] = temp;
+        }
+        return String.valueOf(s);
+    }
+
+
+    /**
+     * 学生出勤记录 I
+     *
+     * @param s
+     * @return https://leetcode-cn.com/problems/student-attendance-record-i/
+     */
+    public boolean checkRecord(String s) {
+        int a = 0;
+        int l = 0;
+        int p = 0;
+        char[] chars = s.toCharArray();
+        for (char ch : chars) {
+            if (ch == 'A') a++;
+            else if (ch == 'L') l++;
+            else p++;
+        }
+        int count = 0;
+        if (a <= 1) {
+            for (int i = 0; i < chars.length - 2; i++) {
+                if (chars[i] == 'L' && chars[i + 1] == 'L'&& chars[i + 1] == 'L') {
+                    count++;
+                }
+            }
+            return count <= 1;
+        }
+        return false;
+    }
+
 
     /**
      * @param s

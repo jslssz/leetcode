@@ -8,8 +8,9 @@ import java.util.ArrayList;
  * @description
  */
 public class Demo {
-    public static void main(String[] args) {
-        String classFile = "com.jd.". replaceAll("\\.", "/") + "MyClass.class";
-        System.out.println(classFile);
+
+    public static void main(String args[]){
+
+        System.out.println((char)('H' + 32));
     }
 }

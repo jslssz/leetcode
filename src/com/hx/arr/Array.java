@@ -13,38 +13,40 @@ import java.util.List;
 public class Array {
     public static void main(String[] args) {
         Array instance = new Array();
-        int[] nums = {3, 2, 2,2};
+        int[] nums = {3, 2, 2, 2};
+    //    System.out.println(instance.checkRecord("L"));
     }
 
 
 
 
     /**
-     *作为子集的成员变量
-     *
+     * 作为子集的成员变量
      */
     private List<List<Integer>> resultList = new ArrayList<>();
+
     /**
      * 子集 78
+     *
      * @param nums
      * @return 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
-     *https://leetcode-cn.com/problems/subsets/
+     * https://leetcode-cn.com/problems/subsets/
      */
     public List<List<Integer>> subsets(int[] nums) {
         if (nums == null || nums.length == 0) {
             return resultList;
         }
-        List<Integer> list =new ArrayList<>();
-        process(list,nums,0);
+        List<Integer> list = new ArrayList<>();
+        process(list, nums, 0);
         return resultList;
     }
 
     private void process(List<Integer> list, int[] nums, int start) {
         resultList.add(new ArrayList<>(list));
-        for (int i = start; i <nums.length ; i++) {
+        for (int i = start; i < nums.length; i++) {
             list.add(nums[i]);
-            process(list,nums,i+1);
-            list.remove(list.size()-1);
+            process(list, nums, i + 1);
+            list.remove(list.size() - 1);
         }
     }
 
@@ -97,6 +99,7 @@ public class Array {
 
     /**
      * 第三大的数
+     *
      * @param nums
      * @return
      */
@@ -104,21 +107,21 @@ public class Array {
         int first = Integer.MIN_VALUE;
         int second = Integer.MIN_VALUE;
         int third = Integer.MIN_VALUE;
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]>first){
-                third=second;
-                second=first;
-                first=nums[i];
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > first) {
+                third = second;
+                second = first;
+                first = nums[i];
             }
-            if(nums[i]<first&&nums[i]>second){
-                third=second;
-                second=nums[i];
+            if (nums[i] < first && nums[i] > second) {
+                third = second;
+                second = nums[i];
             }
-            if(nums[i]<second&&nums[i]>third){
-                third=nums[i];
+            if (nums[i] < second && nums[i] > third) {
+                third = nums[i];
             }
         }
-        if(third==Integer.MIN_VALUE) {
+        if (third == Integer.MIN_VALUE) {
             return first;
         }
         return third;
@@ -126,22 +129,22 @@ public class Array {
     }
 
     public int thirdMaxIII(int[] nums) {
-        int first=Integer.MIN_VALUE,second=Integer.MIN_VALUE,third=Integer.MIN_VALUE;
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]>first){
-                third=second;
-                second=first;
-                first=nums[i];
+        int first = Integer.MIN_VALUE, second = Integer.MIN_VALUE, third = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > first) {
+                third = second;
+                second = first;
+                first = nums[i];
             }
-            if(nums[i]<first&&nums[i]>second){
-                third=second;
-                second=nums[i];
+            if (nums[i] < first && nums[i] > second) {
+                third = second;
+                second = nums[i];
             }
-            if(nums[i]<second&&nums[i]>third){
-                third=nums[i];
+            if (nums[i] < second && nums[i] > third) {
+                third = nums[i];
             }
         }
-        if(third==Integer.MIN_VALUE) {
+        if (third == Integer.MIN_VALUE) {
             return first;
         }
         return third;
@@ -417,8 +420,6 @@ public class Array {
         }
         return queue[0];
     }
-
-
 
 
     /**
