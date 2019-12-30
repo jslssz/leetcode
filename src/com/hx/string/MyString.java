@@ -17,22 +17,146 @@ public class MyString {
     public static void main(String[] args) {
         MyString instance = new MyString();
 
-        System.out.println(instance.toLowerCase("Hello"));
+        System.out.println(instance.rotatedDigits(10));
+    }
+
+    /**
+     * 旋转数字  2 5  6  9
+     * @param N
+     * @return
+     * 链接：https://leetcode-cn.com/problems/rotated-digits/solution/xuan-zhuan-shu-zi-by-leetcode/
+     */
+    public int rotatedDigits(int N) {
+        // Count how many n in [1, N] are good.
+        int ans = 0;
+        for (int n = 1; n <= N; ++n)
+            if (good(n, false)) ans++;
+        return ans;
+    }
+
+    /**
+     * 判断一个数反过来是否一样
+     * @param n
+     * @param flag
+     * @return
+     */
+    private boolean good(int n, boolean flag) {
+        if (n == 0) return flag;
+        // 取模得到最后一位数
+        int d = n % 10;
+        // 如果最后一位数是 3,4,7，返回false
+        if (d == 3 || d == 4 || d == 7) return false;
+        // 如果是 0,1,8 继续遍历，初始flag为false
+        if (d == 0 || d == 1 || d == 8) return good(n / 10, flag);
+        // 如果是2,5,9，继续遍历，初始flag是true
+        return good(n / 10, true);
+    }
+
+
+
+
+
+    /**
+     * 重复叠加字符串匹配
+     * 举个例子，A = "abcd"，B = "cdabcdab"。
+     * 答案为 3， 因为 A 重复叠加三遍后为 “abcdabcdabcd”，此时 B 是其子串；A 重复叠加两遍后为"abcdabcd"，B 并不是其子串。
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/repeated-string-match
+     *
+     * @param A
+     * @param B
+     * @return
+     */
+    public int repeatedStringMatch(String A, String B) {
+        StringBuilder tmp = new StringBuilder(A);
+        int count = 0;
+        for (int i = 0; i < B.length()/A.length() +1; i++) {
+            if (tmp.toString().contains(B)) {
+                return count +1;
+            }
+            count++;
+            // 这里犯了一个很严重的错误
+            tmp.append(A);
+        }
+        return -1;
+    }
+
+    /**
+     * 二进制子串
+     * 00110011
+     *
+     * @param s
+     * @return 链接：https://leetcode-cn.com/problems/count-binary-substrings/solution/ji-shu-er-jin-zhi-zi-chuan-by-leetcode/
+     */
+    public int countBinarySubstrings(String s) {
+        // 结果       前置坐标    后置坐标
+        int ans = 0, prev = 0, cur = 1;
+        // 循环遍历
+        for (int i = 1; i < s.length(); i++) {
+            // 如果前一个字符和后一个字符不一样
+            if (s.charAt(i - 1) != s.charAt(i)) {
+                ans += Math.min(prev, cur);
+                prev = cur;
+                cur = 1;
+            }
+            // 如果前一个字符和后一个字符一样,cur +1
+            else {
+                cur++;
+            }
+        }
+        return ans + Math.min(prev, cur);
+    }
+
+    /**
+     * 给定一个非空字符串 s，最多删除一个字符。判断是否能成为回文字符串。
+     *
+     * @param s
+     * @return
+     */
+    public boolean validPalindrome(String s) {
+        char[] chars = s.toCharArray();
+        int left = 0, right = chars.length - 1, deleteIndex = -1;
+        while (left < right) {
+            // 如果头尾不一致
+            if (chars[left] != chars[right]) {
+                // 第一次出现不一样  把删除下标置为第一次出现不同的头下标，头下标加1
+                if (deleteIndex == -1) {
+                    deleteIndex = left;
+                    left++;
+                }
+                // 如果删除下标的值等于字符串的长度，返回false
+                else if (deleteIndex == chars.length) return false;
+                    // 基于头尾不一样的情况下，改变左下标  改变右下标  改变删除下标
+                    // 这种情况是把右下标往左移动一个位置
+                else {
+                    left = deleteIndex;
+                    right = chars.length - left - 2;
+                    deleteIndex = chars.length;
+                }
+            }
+            // 头尾一致
+            else {
+                left++;
+                right--;
+            }
+        }
+        return true;
     }
 
 
     /**
      * 实现lowercase功能
+     *
      * @param str
      * @return
      */
     public String toLowerCase(String str) {
         char[] chars = str.toCharArray();
-        StringBuilder sb= new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         for (char ch : chars) {
-            if (ch >=65 &&  ch <= 90){
+            if (ch >= 65 && ch <= 90) {
                 sb.append((char) (ch - 32));
-            }else {
+            } else {
                 sb.append(ch);
             }
         }
@@ -42,12 +166,13 @@ public class MyString {
 
     /**
      * 机器人是否能返回原点
+     *
      * @param moves
      * @return
      */
     public boolean judgeCircle(String moves) {
-        int du =0;
-        int lr=0;
+        int du = 0;
+        int lr = 0;
         char[] chars = moves.toCharArray();
         for (char ch : chars) {
             if (ch == 'U') du++;
@@ -55,39 +180,37 @@ public class MyString {
             else if (ch == 'R') lr++;
             else if (ch == 'L') lr--;
         }
-        return du ==0 && lr ==0;
+        return du == 0 && lr == 0;
     }
 
 
-
-
     /**
-     *树转成字符串
+     * 树转成字符串
+     *
      * @param t
      * @return
      */
     public String tree2str(TreeNode t) {
         // 如果当前节点为null，返回空字符串
-        if (t == null)  return "";
+        if (t == null) return "";
         // 如果当前节点没有孩子，那我们不需要在节点后面加上任何括号；
-        if (t.right ==null && t.left ==null) return t.val+"";
+        if (t.right == null && t.left == null) return t.val + "";
         // 如果当前节点只有左孩子，那我们在递归时，只需要在左孩子的结果外加上一层括号，而不需要给右孩子加上任何括号
-        if (t.right ==null) return t.val +"("+tree2str(t.left)+")";
+        if (t.right == null) return t.val + "(" + tree2str(t.left) + ")";
         // 如果当前节点有两个孩子，那我们在递归时，需要在两个孩子的结果外都加上一层括号；
-        return t.val+"("+tree2str(t.left)+")("+tree2str(t.right)+")";
+        return t.val + "(" + tree2str(t.left) + ")(" + tree2str(t.right) + ")";
     }
-
-
 
 
     /**
      * 反转字符串III
+     *
      * @param s
      * @return
      */
     public String reverseWords(String s) {
         String[] split = s.split(" ");
-        StringBuilder sb =new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         for (String tmp : split) {
             String s1 = reverseStringOneWord(tmp);
             sb.append(s1).append(" ");
@@ -96,7 +219,7 @@ public class MyString {
     }
 
     private String reverseStringOneWord(String str) {
-        char[] s= str.toCharArray();
+        char[] s = str.toCharArray();
         int len = s.length;
         for (int i = 0; i < len / 2; i++) {
             char temp = s[len - 1 - i];
@@ -126,7 +249,7 @@ public class MyString {
         int count = 0;
         if (a <= 1) {
             for (int i = 0; i < chars.length - 2; i++) {
-                if (chars[i] == 'L' && chars[i + 1] == 'L'&& chars[i + 1] == 'L') {
+                if (chars[i] == 'L' && chars[i + 1] == 'L' && chars[i + 1] == 'L') {
                     count++;
                 }
             }

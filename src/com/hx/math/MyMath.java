@@ -11,7 +11,7 @@ public class MyMath {
     public static void main(String[] args) {
         MyMath instance = new MyMath();
 
-        System.out.println(instance.subtractProductAndSum(234));
+        System.out.println(instance.convertToTitle(27));
     }
 
     /**
@@ -939,7 +939,12 @@ public class MyMath {
         return null;
     }
 
-
+    /**
+     *阶乘后的0的个数
+     * @param n
+     * @return
+     * https://leetcode-cn.com/problems/factorial-trailing-zeroes/
+     */
     public int trailingZeroes(int n) {
         if (n == 0) {
             return 0;
@@ -993,7 +998,7 @@ public class MyMath {
             arrList.add(1);
             result.add(arrList);
         }
-        // 第一行手动生成
+        // 第二行手动生成
         if (numRows >= 2) {
             arrList = new ArrayList<>();
             arrList.add(1);
