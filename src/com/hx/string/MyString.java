@@ -2,10 +2,7 @@ package com.hx.string;
 
 import com.hx.tree.TreeNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author jxlgcmh
@@ -16,15 +13,152 @@ public class MyString {
 
     public static void main(String[] args) {
         MyString instance = new MyString();
+        // String str = "Bob hit a ball, the hit BALL flew far after it was hit.";
+        String[] words = {"hit"};
+        System.out.println(instance.isLongPressedName("pyplrz", "ppyypllr"));
 
-        System.out.println(instance.rotatedDigits(10));
+
     }
 
     /**
+     * 长键按入
+     * 输入：name = "alex", typed = "aaleex"
+     * 输出：true
+     * 解释：'alex' 中的 'a' 和 'e' 被长按。
+     * https://leetcode-cn.com/problems/long-pressed-name/
+     */
+    public boolean isLongPressedName(String name, String typed) {
+        char[] names = name.toCharArray();
+        char[] types = typed.toCharArray();
+        int indexName = 0, indexType = 0;
+        while (indexName < names.length && indexType < types.length && names[indexName] == types[indexType]) {
+            indexType++;
+            // 真正名字内没有重复字符
+            if (indexName < names.length - 1 && names[indexName] != names[indexName + 1]) {
+                while (indexType < types.length && names[indexName] == types[indexType]) {
+                    indexType++;
+                }
+            }
+            indexName++;
+        }
+        return indexName == name.length();
+    }
+
+
+    /**
+     * 亲密字符串  题目的意思是必须有俩个地方交换后要一致  如果要结果正确，两个字符串一样，则说明A串有重复的字母
+     * 如果两者！equals，
+     *
+     * @param A
+     * @param B
+     * @return 链接：https://leetcode-cn.com/problems/buddy-strings/solution/qin-mi-zi-fu-chuan-by-leetcode/
+     */
+    public boolean buddyStrings(String A, String B) {
+        // 长度不一致  直接返回false
+        if (A.length() != B.length()) return false;
+        // 两个字符串相同
+        if (A.equals(B)) {
+            // 统计A串的每个字符的字符个数
+            int[] count = new int[26];
+            for (int i = 0; i < A.length(); ++i)
+                count[A.charAt(i) - 'a']++;
+
+            for (int c : count)
+                // 如果存在某个字符的次数出现频率超过两次  返回true  否则
+                if (c > 1) return true;
+            return false;
+        } else {
+            // 两个串的长度一致但不一样  只需要判断两个地方他们交换后会不会一样  超过三个地二不一样直接返回false
+            int first = -1, second = -1;
+            for (int i = 0; i < A.length(); ++i) {
+                if (A.charAt(i) != B.charAt(i)) {
+                    if (first == -1)
+                        // 记录位置
+                        first = i;
+                    else if (second == -1)
+                        // 记录位置
+                        second = i;
+                    else
+                        // 超过两个字符  直接返回false
+                        return false;
+                }
+            }
+            // 最终比较交换后的位置是否一样
+            return (second != -1 && A.charAt(first) == B.charAt(second) &&
+                    A.charAt(second) == B.charAt(first));
+        }
+    }
+
+
+    /**
+     * 最常见的单词
+     * 机器不通过
+     *
+     * @param paragraph
+     * @param banned
+     * @return https://leetcode-cn.com/problems/most-common-word/
+     */
+    public String mostCommonWord(String paragraph, String[] banned) {
+        Map<String, Integer> map = new HashMap<>();
+        String[] split = paragraph.split(" ");
+        for (String s1 : split) {
+            if (s1.contains(",") || s1.contains(".")) s1 = s1.substring(0, s1.length() - 1);
+            s1 = s1.toLowerCase();
+            if (map.containsKey(s1)) {
+                map.put(s1, map.get(s1) + 1);
+            } else {
+                map.put(s1, 1);
+            }
+        }
+        int val = 0;
+        String res = "";
+        for (String s : map.keySet()) {
+            if (banned != null) {
+                for (String s1 : banned) {
+                    if (!s.equals(s1)) {
+                        if (map.get(s) > val) {
+                            val = map.get(s);
+                            res = s;
+                        }
+                    }
+                }
+            } else {
+                if (map.get(s) > val) {
+                    val = map.get(s);
+                    res = s;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 唯一福尔摩斯密码词
+     *
+     * @param words
+     * @return https://leetcode-cn.com/problems/unique-morse-code-words/
+     */
+    public int uniqueMorseRepresentations(String[] words) {
+        HashSet<String> set = new HashSet<>();
+        String[] code = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
+        for (String word : words) {
+            StringBuilder sb = new StringBuilder();
+            char[] chars = word.toCharArray();
+            for (char ch : chars) {
+                int tmp = (ch - 'a') % 26;
+                sb.append(code[tmp]);
+            }
+            set.add(sb.toString());
+        }
+        return set.size();
+    }
+
+
+    /**
      * 旋转数字  2 5  6  9
+     *
      * @param N
-     * @return
-     * 链接：https://leetcode-cn.com/problems/rotated-digits/solution/xuan-zhuan-shu-zi-by-leetcode/
+     * @return 链接：https://leetcode-cn.com/problems/rotated-digits/solution/xuan-zhuan-shu-zi-by-leetcode/
      */
     public int rotatedDigits(int N) {
         // Count how many n in [1, N] are good.
@@ -36,6 +170,7 @@ public class MyString {
 
     /**
      * 判断一个数反过来是否一样
+     *
      * @param n
      * @param flag
      * @return
@@ -53,9 +188,6 @@ public class MyString {
     }
 
 
-
-
-
     /**
      * 重复叠加字符串匹配
      * 举个例子，A = "abcd"，B = "cdabcdab"。
@@ -70,9 +202,9 @@ public class MyString {
     public int repeatedStringMatch(String A, String B) {
         StringBuilder tmp = new StringBuilder(A);
         int count = 0;
-        for (int i = 0; i < B.length()/A.length() +1; i++) {
+        for (int i = 0; i < B.length() / A.length() + 1; i++) {
             if (tmp.toString().contains(B)) {
-                return count +1;
+                return count + 1;
             }
             count++;
             // 这里犯了一个很严重的错误
@@ -218,6 +350,12 @@ public class MyString {
         return sb.toString().trim();
     }
 
+    /**
+     * 反转某个单词
+     *
+     * @param str
+     * @return
+     */
     private String reverseStringOneWord(String str) {
         char[] s = str.toCharArray();
         int len = s.length;
@@ -412,15 +550,18 @@ public class MyString {
      */
     public String addStrings(String num1, String num2) {
         StringBuilder res = new StringBuilder("");
-        int i = num1.length() - 1, j = num2.length() - 1, carry = 0;
-        while (i >= 0 || j >= 0) {
-            int n1 = i >= 0 ? num1.charAt(i) - '0' : 0;
-            int n2 = j >= 0 ? num2.charAt(j) - '0' : 0;
+        int num1Index = num1.length() - 1;
+        int num2Index = num2.length() - 1;
+        int carry = 0;
+        while (num1Index >= 0 || num2Index >= 0) {
+            // 字符串num1数字的下标大于等于0  ？ ch(index)  :  0
+            int n1 = num1Index >= 0 ? num1.charAt(num1Index) - '0' : 0;
+            int n2 = num2Index >= 0 ? num2.charAt(num2Index) - '0' : 0;
             int tmp = n1 + n2 + carry;
             carry = tmp / 10;
             res.append(tmp % 10);
-            i--;
-            j--;
+            num1Index--;
+            num2Index--;
         }
         if (carry == 1) {
             res.append(1);
@@ -430,7 +571,7 @@ public class MyString {
 
 
     /**
-     * 字符串中的第一个唯一字符
+     * 字符串中的第一个唯一字符  意思是只出现一次的字符
      *
      * @param s
      * @return 时间复杂度  O(n)=2*n;
@@ -453,6 +594,8 @@ public class MyString {
 
     /**
      * 赎金信
+     * 即A字符的字符能否由B串中的字符构成
+     * 即B串中的字符的个数统计下来要大于等于A串中的字符出现的次数
      *
      * @param ransomNote
      * @param magazine
@@ -534,36 +677,12 @@ public class MyString {
         return new String(chars);
     }
 
-
-    public String reverseVowelsIIII(String s) {
-        char[] chars = s.toCharArray();
-        int p2 = 0;
-        int len = chars.length;
-        for (int i = 0; i <= len - 2; i++) {
-            while (!isVowel(chars[i])) {
-                i++;
-                if (i > len - 2) {
-                    break;
-                }
-            }
-
-            while (!isVowel(chars[len - 1 - p2])) {
-                p2++;
-                if (p2 >= len) {
-                    break;
-                }
-            }
-            if (i < len - 1 - p2) {
-                char temp = chars[i];
-                chars[i] = chars[len - 1 - p2];
-                chars[len - 1 - p2] = temp;
-                p2++;
-            }
-
-        }
-        return new String(chars);
-    }
-
+    /**
+     * 用来判断该字符是否是元音字符
+     *
+     * @param input
+     * @return
+     */
     private boolean isVowel(char input) {
         return 'a' == input || 'e' == input || 'i' == input || 'o' == input || 'u' == input || 'A' == input || 'E' == input || 'I' == input || 'O' == input || 'U' == input;
     }
@@ -585,14 +704,17 @@ public class MyString {
         for (char c : S.toCharArray()) {
             if (c == '(') {
                 count++;
+                // 如果是第二个左括号，则加入sb
                 if (count > 1) {
                     sb.append(c);
                 }
             } else {
+                // 在count大于1的情况下，左括号加入sb
                 if (count > 1) {
                     sb.append(c);
                 }
                 // 相当于使用栈的情况下的弹出栈顶
+                // count 再减一下
                 count--;
             }
         }
@@ -607,22 +729,23 @@ public class MyString {
      * @return result
      */
     public boolean isPalindrome(String s) {
-        char[] cs = s.toCharArray();
-        int cnt = 0, j = 0;
-        for (int i = 0; i < cs.length; i++) {
-            if (('0' <= cs[i] && cs[i] <= '9') || ('a' <= cs[i] && cs[i] <= 'z')) {
-                cs[cnt++] = cs[i];
+        char[] chars = s.toCharArray();
+        int index = 0, j = 0;
+        for (int i = 0; i < chars.length; i++) {
+            // 下面的表述是数字也算，过滤其他非数字、字母的字符
+            if (('0' <= chars[i] && chars[i] <= '9') || ('a' <= chars[i] && chars[i] <= 'z')) {
+                chars[index++] = chars[i];
             }
             // 大写字母的处理
-            else if ('A' <= cs[i] && cs[i] <= 'Z') {
-                cs[cnt++] = (char) (cs[i] - 'A' + 'a');
+            else if ('A' <= chars[i] && chars[i] <= 'Z') {
+                chars[index++] = (char) (chars[i] - 'A' + 'a');
             }
             // 自动过滤了其他非字母的字符
         }
         // 下标指回去
-        cnt--;
-        while (j < cnt) {
-            if (cs[j++] != cs[cnt--]) {
+        index--;
+        while (j < index) {
+            if (chars[j++] != chars[index--]) {
                 return false;
             }
         }
@@ -635,20 +758,21 @@ public class MyString {
      * trim()方法的作用:取出字符串首位的空格,中间的空格不会去除
      *
      * @param s "Hello World";
-     * @return
+     * @return https://leetcode-cn.com/problems/length-of-last-word/
      */
     public int lengthOfLastWord(String s) {
         if (s == null || s.trim().length() == 0) {
             return 0;
         }
-        int length = s.trim().length();
         int i = s.trim().lastIndexOf(" ");
         return s.trim().length() - s.trim().lastIndexOf(" ") - 1;
     }
 
 
     /**
+     * 实现 strStr() 函数。相当于Java的 indexOf() 定义相符。
      * 给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+     * 我自己写的什么代码  我看不懂
      *
      * @param haystack
      * @param needle
@@ -663,19 +787,19 @@ public class MyString {
         }
         int[] shift = new int[256];
         int i = 0;
-        int plen = needle.length();
+        int targetLen = needle.length();
         int len = haystack.length();
         int k = 0;
         for (char c : needle.toCharArray()) {
-            shift[c] = plen - k++;
+            shift[c] = targetLen - k++;
         }
-        while (i + plen <= len) {
-            if (needle.equals(haystack.substring(i, i + plen))) {
+        while (i + targetLen <= len) {
+            if (needle.equals(haystack.substring(i, i + targetLen))) {
             } else {
-                if (i + plen < len && shift[haystack.charAt(i + plen)] != 0) {
-                    i = i + shift[haystack.charAt(i + plen)];
+                if (i + targetLen < len && shift[haystack.charAt(i + targetLen)] != 0) {
+                    i = i + shift[haystack.charAt(i + targetLen)];
                 } else {
-                    i = i + plen;
+                    i = i + targetLen;
                 }
             }
         }
@@ -686,7 +810,7 @@ public class MyString {
      * 有效的括号 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效
      *
      * @param s
-     * @return
+     * @return https://leetcode-cn.com/problems/valid-parentheses/
      */
     public boolean isValid(String s) {
         // 边界条件的判断
@@ -704,13 +828,10 @@ public class MyString {
         for (char item : data) {
             if (item == '[' || item == '{' || item == '(') {
                 stack[stackIndex++] = item;
-            } else if (stackIndex == 0 || item == ']' && stack[stackIndex - 1] != '['
-                    || item == '}' && stack[stackIndex - 1] != '{'
-                    || item == ')' && stack[stackIndex - 1] != '(') {
-                boolean bool1 = stackIndex == 0 || item == ']';
-                boolean bool2 = stack[stackIndex - 1] != '[' || item == '}';
-                boolean bool3 = stack[stackIndex - 1] != '{' || item == ')';
-                boolean bool4 = stack[stackIndex - 1] != '(';
+            } else if (stackIndex == 0 || (item == ']' && stack[stackIndex - 1] != '[')
+                    || (item == '}' && stack[stackIndex - 1] != '{')
+                    || (item == ')' && stack[stackIndex - 1] != '(')
+            ) {
                 return false;
             } else {
                 stack[--stackIndex] = '0';
