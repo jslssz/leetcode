@@ -13,8 +13,11 @@ import java.util.List;
 public class Array {
     public static void main(String[] args) {
         Array instance = new Array();
-        int[] nums = {3, 2, 2, 2};
-    //    System.out.println(instance.checkRecord("L"));
+        int[] nums = {0,0,3, 2, 2, 2};
+        instance.moveZeroes(nums);
+        for (int num : nums) {
+            System.out.println(num);
+        }
     }
 
 
